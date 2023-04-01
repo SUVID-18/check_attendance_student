@@ -9,8 +9,13 @@ class RegisterDevicePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('기기 등록 페이지'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('기기 등록 페이지'),
+      ),
+      body: Center(
+        child: Text('기기 등록 페이지'),
+      ),
     );
   }
 }

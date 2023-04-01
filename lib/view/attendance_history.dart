@@ -8,8 +8,13 @@ class AttendanceHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('출결 기록 보는 페이지'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('출결 관리 페이지'),
+      ),
+      body: const Center(
+        child: Text('출결 기록 보는 페이지'),
+      ),
     );
   }
 }

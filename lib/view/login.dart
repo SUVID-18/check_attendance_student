@@ -6,8 +6,13 @@ class LoginPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('로그인 페이지'),
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('로그인 페이지'),
+      ),
+      body: const Center(
+        child: Text('로그인 페이지'),
+      ),
     );
   }
 }
