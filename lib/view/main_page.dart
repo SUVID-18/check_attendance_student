@@ -11,29 +11,100 @@ class MainPage extends StatelessWidget {
 
   const MainPage({required this.appName, Key? key}) : super(key: key);
 
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(appName),
-      ),
-      body: Center(
-        child: Column(
-          children: [
-            Text('페이지 이동 버튼 모음', style: Theme.of(context).textTheme.headlineLarge,),
-            MaterialButton(
-                child: Text('로그인 페이지로'),
-                onPressed: () => context.push('/login')),
-            MaterialButton(
-                child: Text('설정 페이지로'),
-                onPressed: () => context.push('/settings')),
-            MaterialButton(
-                child: Text('디바이스 등록 페이지로'),
-                onPressed: () => context.push('/settings/register_device')),
-            MaterialButton(
-                child: Text('출결 기록 페이지로'),
-                onPressed: () => context.push('/history')),
+    return MaterialApp(
+      theme: ThemeData(
+          colorSchemeSeed: const Color(0xff6750a4), useMaterial3: true),
+      home: Scaffold(
+        appBar: AppBar(title: const Text('페이지 이동 버튼모음')),
+        body: Column(
+          children: const <Widget>[
+            Spacer(),
+            ElevatedCardExample(),
+            FilledCardExample(),
+            OutlinedCardExample(),
+            ElevatedCardExample_2(),
+            Spacer(),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class ElevatedCardExample extends StatelessWidget {
+  const ElevatedCardExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Card(
+        child: SizedBox(
+          width: 300,
+          height: 100,
+          child: Center(child: Text('로그인 페이지로')),
+        ),
+      ),
+    );
+  }
+}
+
+class FilledCardExample extends StatelessWidget {
+  const FilledCardExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Card(
+        elevation: 0,
+        color: Theme.of(context).colorScheme.surfaceVariant,
+        child: const SizedBox(
+          width: 300,
+          height: 100,
+          child: Center(child: Text('설정 페이지로')),
+        ),
+      ),
+    );
+  }
+}
+
+class OutlinedCardExample extends StatelessWidget {
+  const OutlinedCardExample({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Card(
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          side: BorderSide(
+            color: Theme.of(context).colorScheme.outline,
+          ),
+          borderRadius: const BorderRadius.all(Radius.circular(12)),
+        ),
+        child: const SizedBox(
+          width: 300,
+          height: 100,
+          child: Center(child: Text('디바이스 등록 페이지로')),
+        ),
+      ),
+    );
+  }
+}
+
+class ElevatedCardExample_2 extends StatelessWidget {
+  const ElevatedCardExample_2({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Center(
+      child: Card(
+        child: SizedBox(
+          width: 300,
+          height: 100,
+          child: Center(child: Text('출결 기록 페이지')),
         ),
       ),
     );
