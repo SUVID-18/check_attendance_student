@@ -8,7 +8,7 @@ class AttendanceHistoryPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return Scaffold( 
       appBar: AppBar(
         title: Text('출결 관리 페이지'),
       ),
