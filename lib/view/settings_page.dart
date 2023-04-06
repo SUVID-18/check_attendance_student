@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// 앱 내 환경설정에 해당되는 페이지 입니다.
 ///
@@ -53,20 +54,21 @@ class _SettingsPageState extends State<SettingsPage> {
 
                   ///계정정보란
                   //터치시 AlertDialog 이용하여 계정정보를 보여줌
+                  //그냥 쓰니 text overflow가 나서 sizedbox로 감싸고 shrinkwarp사용
                   GestureDetector(
                       onTap: (){
                         showDialog(context: context,
                             builder: (BuildContext context)=>
                                 AlertDialog(
                                     title:Text("계정정보"),
-                                    content: Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: [
-                                        Text("이름: $_userName"),
-                                        Text("학번: $_userNumber"),
-                                        Text("소속: $_userMajor")
-                                      ],
+                                    content: SizedBox(
+                                      width: double.maxFinite,
+                                      child: ListView(
+                                        shrinkWrap: true,
+                                        children: [
+                                          Text("이름: $_userName, 학번: $_userNumber, 소속: $_userMajor")
+                                        ],
+                                      ),
                                     ),
                                     actions: <Widget>[
                                       TextButton(onPressed: ()=> Navigator.pop(context),
@@ -96,7 +98,7 @@ class _SettingsPageState extends State<SettingsPage> {
 
                   ///로그아웃 란
                   //터치시 AlertDialog이용 로그아웃 여부 질문
-                  //확인 버튼 터치시 로그인 화면 이동, 취소버튼시 이전화면으로 pop처리
+                  //확인 버튼 터치시 로그인 화면 이동, 취소버튼시 이전화면으로 push처리
                   //확인 버튼은 비교적 짙은색의 elevetedbutton, 취소버튼은 textbutton
                   GestureDetector(
                       onTap: (){
@@ -108,7 +110,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                     actions: <Widget>[
                                       TextButton(onPressed: ()=> Navigator.pop(context),
                                           child: Text("취소")),
-                                      ElevatedButton(onPressed: ()=> Navigator.pop(context,"login"),
+                                      ElevatedButton(onPressed: (){
+                                        context.push("/login");
+                                        },
                                           child: Text("확인"))
                                     ]
                                 )

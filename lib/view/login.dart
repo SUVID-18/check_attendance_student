@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 /// 로그인 시 나타나는 페이지 입니다.
 class LoginPage extends StatefulWidget {
@@ -66,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                   }, child: Text("Cancel"),
                   ),
                   ///다음 페이지로 가는 버튼 Next
-                  ///pop기능 만들어 놓음 메인페이지로 이동
+                  ///pop기능 사용시 페이지 이동이 꼬여서 context.push이용
                   ///잘못된 정보 입력시 AlertDialog뜨도록 구현해놓음
                   ElevatedButton(onPressed: (){
                     //showDialog(
@@ -81,6 +82,7 @@ class _LoginPageState extends State<LoginPage> {
                     //                 )
                     //                );
                     //Navigator.pop(context,"/");
+                    context.push('/');
                   }, child: Text('Next'))
                 ],
               ),
@@ -91,6 +93,14 @@ class _LoginPageState extends State<LoginPage> {
                     SizedBox(height: 50,),
                     Image.asset('assets/images/swu_bluelogo.png')
                   ]
+              ),
+              SizedBox(
+                width: double.infinity,
+                height: 50,
+                child: ElevatedButton(
+                  child: Text('기기변경 신청',style: TextStyle(fontSize: 15),),
+                  onPressed: ()=>context.push('/register_device'),
+                ),
               )
             ],
           ),

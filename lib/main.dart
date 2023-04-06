@@ -29,12 +29,10 @@ class App extends StatelessWidget {
         GoRoute(
           path: 'settings',
           builder: (context, state) => SettingsPage(),
-          routes: [
-            GoRoute(
-              path: 'register_device',
-              builder: (context, state) => RegisterDevicePage(),
-            ),
-          ]
+        ),
+        GoRoute(
+          path: 'register_device',
+          builder: (context, state) => RegisterDevicePage(),
         ),
         GoRoute(
           path: 'history',
