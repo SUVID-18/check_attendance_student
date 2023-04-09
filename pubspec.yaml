@@ -67,6 +67,7 @@ flutter:
     - assets/images/swu_att_bg.png
     - assets/images/swu_bluelogo.png
     - assets/images/swu_horizontalLogo.png
+    - assets/images/swu_att_bg.png
   #   - images/a_dot_burr.jpeg
   #   - images/a_dot_ham.jpeg
 
