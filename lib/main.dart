@@ -22,25 +22,25 @@ class App extends StatelessWidget {
     // 앱 실행 시 가장 먼저 출력되는 페이지
     GoRoute(
       path: '/',
-      builder: (context, state) => MainPage(
+      builder: (context, state) => const MainPage(
         appName: appName,
       ),
       routes: [
         GoRoute(
           path: 'login',
-          builder: (context, state) => LoginPage(),
+          builder: (context, state) => const LoginPage(),
         ),
         GoRoute(
           path: 'settings',
-          builder: (context, state) => SettingsPage(),
+          builder: (context, state) => const SettingsPage(),
         ),
         GoRoute(
           path: 'register_device',
-          builder: (context, state) => RegisterDevicePage(),
+          builder: (context, state) => const RegisterDevicePage(),
         ),
         GoRoute(
           path: 'history',
-          builder: (context, state) => AttendanceHistoryPage(),
+          builder: (context, state) => const AttendanceHistoryPage(),
         ),
       ]
     ),
