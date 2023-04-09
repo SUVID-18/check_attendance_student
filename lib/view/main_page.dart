@@ -82,7 +82,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
             SizedBox(height: 16),
 
 
-
             MaterialButton(
               child: Text('출결 기록 페이지로'),
               onPressed: () => context.push('/history'),
@@ -95,8 +94,6 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
               ),
             ),
             SizedBox(height: 16),
-
-
             MaterialButton(
               child: Text('설정 페이지로'),
               onPressed: () => context.push('/settings'),
