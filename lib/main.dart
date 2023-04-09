@@ -5,8 +5,12 @@ import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
 import 'package:check_attendance_student/view/main_page.dart';
 import 'package:check_attendance_student/view/settings_page.dart';
+import 'package:intl/date_symbol_data_local.dart';
 
-void main() => runApp(App());
+//달력 로컬라이징을 위한 async화와 initializeDateFormatting
+void main() async{
+  await initializeDateFormatting();
+  runApp(App());}
 
 /// 앱 이름에 해당되는 상수
 const String appName = '전출 시스템';
@@ -29,12 +33,10 @@ class App extends StatelessWidget {
         GoRoute(
           path: 'settings',
           builder: (context, state) => SettingsPage(),
-          routes: [
-            GoRoute(
-              path: 'register_device',
-              builder: (context, state) => RegisterDevicePage(),
-            ),
-          ]
+        ),
+        GoRoute(
+          path: 'register_device',
+          builder: (context, state) => RegisterDevicePage(),
         ),
         GoRoute(
           path: 'history',

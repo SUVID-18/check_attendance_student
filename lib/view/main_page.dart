@@ -29,7 +29,7 @@ class MainPage extends StatelessWidget {
                 onPressed: () => context.push('/settings')),
             MaterialButton(
                 child: Text('디바이스 등록 페이지로'),
-                onPressed: () => context.push('/settings/register_device')),
+                onPressed: () => context.push('/register_device')),
             MaterialButton(
                 child: Text('출결 기록 페이지로'),
                 onPressed: () => context.push('/history')),
