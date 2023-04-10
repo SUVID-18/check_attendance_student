@@ -16,7 +16,9 @@ import 'package:go_router/go_router.dart';
 ///           ),
 ///```
 class LoginViewModel {
+  /// 사용자 ID에 해당되는 컨트롤러
   final usernameController = TextEditingController();
+  /// 사용자 비밀번호에 해당되는 컨트롤러
   final passwordController = TextEditingController();
 
   /// 로그인 버튼을 누른 경우 수행할 동작
