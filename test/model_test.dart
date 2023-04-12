@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:check_attendance_student/model/attendance_information.dart';
 import 'package:check_attendance_student/model/lecture.dart';
 import 'package:check_attendance_student/model/student.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -63,6 +64,20 @@ void main() {
           validTime: 20);
       final jsonData = jsonEncode(lecture);
       expect(lecture.id, Lecture.fromJson(jsonDecode(jsonData)).id);
+    });
+  });
+  group('출결 여부를 가진 객체 테스트', () {
+    test('출결 여부를 가진 객체가 생성되는지 테스트', () {
+      const attendanceInfo = AttendanceInformation(
+          subjectName: '프로그래밍 언어론', professorName: '조영일', attendance: true);
+      expect(attendanceInfo.subjectName, '프로그래밍 언어론');
+    });
+    test('출결 여부를 가진 객체의 직렬화 테스트', () {
+      const attendanceInfo = AttendanceInformation(
+          subjectName: '프로그래밍 언어론', professorName: '조영일', attendance: true);
+      final jsonData = jsonEncode(attendanceInfo);
+      expect(attendanceInfo.professorName,
+          AttendanceInformation.fromJson(jsonDecode(jsonData)).professorName);
     });
   });
 }
