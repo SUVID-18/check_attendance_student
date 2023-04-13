@@ -12,7 +12,19 @@ enum AttendanceResult {
   normal,
 
   /// 지각
-  tardy,
+  tardy;
+
+  @override
+  String toString() {
+    switch (this) {
+      case AttendanceResult.absent:
+        return '결석';
+      case AttendanceResult.normal:
+        return '출석';
+      case AttendanceResult.tardy:
+        return '지각';
+    }
+  }
 }
 
 /// 출결 여부에 대한 정보를 가지고 있는 클래스
