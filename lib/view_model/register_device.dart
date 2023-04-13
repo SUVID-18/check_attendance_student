@@ -1,19 +1,6 @@
 import 'package:flutter/material.dart';
 
 /// 기기변경 페이지의 동작을 담당하는 클래스
-///
-/// 기기변경 페이지에서 필요한 부분에 대입시키면 된다.
-///
-/// ```dart
-///var viewModel = RegisterDeviceViewModel();
-///TextField(
-///        controller: viewModel.nameController,
-///        decoration: InputDecoration(
-///            filled: true,
-///            labelText: 'ID'
-///        ),
-///      ),
-///```
 class RegisterDeviceViewModel {
   /// 이름에 해당되는 컨트롤러
   final nameController = TextEditingController();

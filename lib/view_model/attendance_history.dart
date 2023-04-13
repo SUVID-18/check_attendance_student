@@ -1,5 +1,6 @@
 import 'package:check_attendance_student/model/attendance_information.dart';
 
+/// 출결 기록 페이지의 동작을 담당하는 클래스
 class AttendanceHistoryViewModel {
   /// 출결 기록 리스트
   ///
@@ -28,7 +29,7 @@ class AttendanceHistoryViewModel {
   static final AttendanceHistoryViewModel _instance =
       AttendanceHistoryViewModel._init();
 
-  /// 출결 기록 페이지의 동작을 담당하는 클래스
+  /// 출결 기록 페이지의 동작을 담당하는 클래스의 생성자
   ///
   /// 출결 기록 페이지에서 필요한 부분에 대입시키면 된다.
   ///
