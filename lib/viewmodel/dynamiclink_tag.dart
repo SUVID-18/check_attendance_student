@@ -2,6 +2,13 @@ import 'package:nfc_manager/nfc_manager.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 
 /// NFC 태깅을 감지했을 때, 태그 uuid를 읽어 attendance.dart 페이지를 Navigate하는 [dynamicLink]를 반환하는 뷰 모델이다.
+///
+/// ```dart
+/// final DynamicLinkTagViewModel _viewModel = DynamicLinkTagViewModel();
+///
+/// onPressed: () async {
+///   final dynamicLink = await _viewModel.readTag()
+/// }
 class DynamicLinkTagViewModel {
   Map<String, dynamic> read_result = {};
 
