@@ -15,6 +15,14 @@ jobs:
       - name: Flutter action
         uses: subosito/flutter-action@v2.3.0
 
+      - name: Prepare for Firebase
+        env:
+          OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
+          GOOGLE_KEY: ${{ secrets.GOOGLE_SERVICES }}
+        run: |
+          echo $OPTIONS > lib/firebase_options.dart
+          echo $GOOGLE_KEY > android/app/google-services.json
+
       - name: Install dependencies
         run: flutter pub get
 
@@ -34,6 +42,14 @@ jobs:
 
       - name: Flutter action
         uses: subosito/flutter-action@v2.8.0
+
+      - name: Prepare for Firebase
+        env:
+          OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
+          GOOGLE_KEY: ${{ secrets.GOOGLE_SERVICES }}
+        run: |
+          echo $OPTIONS > lib/firebase_options.dart
+          echo $GOOGLE_KEY > android/app/google-services.json
 
       - name: Install dependencies
         run: flutter pub get
