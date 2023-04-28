@@ -20,8 +20,8 @@ jobs:
           OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
           GOOGLE_KEY: ${{ secrets.GOOGLE_SERVICES }}
         run: |
-          echo $OPTIONS > lib/firebase_options.dart
-          echo $GOOGLE_KEY > android/app/google-services.json
+          echo $OPTIONS | base64 --decode > lib/firebase_options.dart
+          echo $GOOGLE_KEY | base64 --decode > android/app/google-services.json
 
       - name: Install dependencies
         run: flutter pub get
@@ -48,8 +48,8 @@ jobs:
           OPTIONS: ${{ secrets.FIREBASE_OPTIONS }}
           GOOGLE_KEY: ${{ secrets.GOOGLE_SERVICES }}
         run: |
-          echo $OPTIONS > lib/firebase_options.dart
-          echo $GOOGLE_KEY > android/app/google-services.json
+          echo $OPTIONS | base64 --decode > lib/firebase_options.dart
+          echo $GOOGLE_KEY | base64 --decode > android/app/google-services.json
 
       - name: Install dependencies
         run: flutter pub get
