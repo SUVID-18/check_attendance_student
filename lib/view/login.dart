@@ -62,6 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                   ///다음 페이지로 가는 버튼 Next
                   ///pop기능 사용시 페이지 이동이 꼬여서 context.push이용
                   ///잘못된 정보 입력시 AlertDialog뜨도록 구현해놓음
+                  ElevatedButton(onPressed: (){
                     //showDialog(
                     //       context: context,
                     //       builder: (BuildContext context)=>AlertDialog(
