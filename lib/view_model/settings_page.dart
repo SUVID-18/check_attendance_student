@@ -58,6 +58,7 @@ class SettingsPageViewModel {
   ///    viewModel.logout();
   ///  },
   ///  child: const Text('로그아웃'))
+  ///```
   void logout() {
     showDialog(
       barrierDismissible: false,
