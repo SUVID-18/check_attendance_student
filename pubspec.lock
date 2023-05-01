@@ -5,10 +5,10 @@ packages:
     dependency: transitive
     description:
       name: _fe_analyzer_shared
-      sha256: a36ec4843dc30ea6bf652bf25e3448db6c5e8bcf4aa55f063a5d1dad216d8214
+      sha256: "8880b4cfe7b5b17d57c052a5a3a8cc1d4f546261c7cc8fbd717bd53f48db0568"
       url: "https://pub.dev"
     source: hosted
-    version: "58.0.0"
+    version: "59.0.0"
   _flutterfire_internals:
     dependency: transitive
     description:
@@ -21,10 +21,10 @@ packages:
     dependency: transitive
     description:
       name: analyzer
-      sha256: cc4242565347e98424ce9945c819c192ec0838cb9d1f6aa4a97cc96becbc5b27
+      sha256: a89627f49b0e70e068130a36571409726b04dab12da7e5625941d2c8ec278b96
       url: "https://pub.dev"
     source: hosted
-    version: "5.10.0"
+    version: "5.11.1"
   args:
     dependency: transitive
     description:
@@ -89,6 +89,30 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.1.1"
+  cloud_firestore:
+    dependency: "direct main"
+    description:
+      name: cloud_firestore
+      sha256: "7e15d929d3d82774bffaf4b2c0bfc85b429fe08dff7280a601c43f309cea1ebf"
+      url: "https://pub.dev"
+    source: hosted
+    version: "4.5.3"
+  cloud_firestore_platform_interface:
+    dependency: transitive
+    description:
+      name: cloud_firestore_platform_interface
+      sha256: "76ba7b9dd43ce7f07e75a2349f3eb3e2c61e1bea88fec4798c3377cccf44cd7a"
+      url: "https://pub.dev"
+    source: hosted
+    version: "5.12.1"
+  cloud_firestore_web:
+    dependency: transitive
+    description:
+      name: cloud_firestore_web
+      sha256: "0c1305722339e0b3fc0ce62bf6233b3f8762cc105a26af02171b849e6a3b3727"
+      url: "https://pub.dev"
+    source: hosted
+    version: "3.4.2"
   code_builder:
     dependency: transitive
     description:
@@ -268,10 +292,10 @@ packages:
     dependency: "direct main"
     description:
       name: go_router
-      sha256: "6af43e0948b9f64a812afbb9ac3f76e2c8f5abe4efaba4188702a56af46b98c2"
+      sha256: bd7e671d26fd39c78cba82070fa34ef1f830b0e7ed1aeebccabc6561302a7ee5
       url: "https://pub.dev"
     source: hosted
-    version: "6.5.2"
+    version: "6.5.9"
   http_parser:
     dependency: transitive
     description:
@@ -284,10 +308,10 @@ packages:
     dependency: "direct main"
     description:
       name: intl
-      sha256: a3715e3bc90294e971cb7dc063fbf3cd9ee0ebf8604ffeafabd9e6f16abbdbe6
+      sha256: "3bc132a9dbce73a7e4a21a17d06e1878839ffbf975568bc875c60537824b0c4d"
       url: "https://pub.dev"
     source: hosted
-    version: "0.18.0"
+    version: "0.18.1"
   js:
     dependency: transitive
     description:
