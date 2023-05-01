@@ -1,3 +1,5 @@
+import 'package:check_attendance_student/model/student.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -8,21 +10,8 @@ class SettingsPageViewModel {
   /// 특정 메서드에서 위젯을 띄우기 위한 [BuildContext]
   BuildContext context;
 
-  /// 사용자 이름에 해당되는 읽기전용 속성
-  String get userName => _userName;
-
-  /// 사용자 학번 해당되는 읽기전용 속성
-  String get studentId => _studentId;
-
-  /// 사용자 전공에 해당되는 읽기전용 속성
-  String get userMajor => _userMajor;
-
-  /// 사용자 이메일 계정 확인
+  /// 사용자 이메일 계정
   String get userEmail => _userEmail;
-
-  late final String _userName;
-  late final String _studentId;
-  late final String _userMajor;
   final String _userEmail =
       FirebaseAuth.instance.currentUser?.email ?? '이메일 없음';
 
@@ -54,9 +43,7 @@ class SettingsPageViewModel {
   ///
   /// ```dart
   /// ElevatedButton(
-  ///  onPressed: () {
-  ///    viewModel.logout();
-  ///  },
+  ///  onPressed: () => viewModel.logout(),
   ///  child: const Text('로그아웃'))
   ///```
   void logout() {
@@ -85,9 +72,33 @@ class SettingsPageViewModel {
             }));
   }
 
-  SettingsPageViewModel._init({required this.context}) {
-    _userName = '';
-    _studentId = '';
-    _userMajor = '';
+  /// 학생 정보를 반환하는 메서드
+  ///
+  /// 계정의 UID를 이용해서 학생 정보가 담긴 객체를 반환하는 메서드이다.
+  /// 만일 어떠한 문제로 인해 학생 정보를 찾을 수 없는 경우 `null`을 반환한다.
+  ///
+  /// 해당 메서드는 인터넷 통신에 의한 대기시간이 필요하기에 [Future]형태를 띈다.
+  ///
+  /// ## 예제
+  /// 코드가 너무 길어 생략. [FutureBuilder] 참고바람.
+  ///
+  /// ## 같이보기
+  /// * [Student]
+  /// * [FutureBuilder]
+  Future<Student?> getStudentInfo() async {
+    var user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      var student = await FirebaseFirestore.instance
+          .collection('students')
+          .doc(user.uid)
+          .get();
+      var data = student.data();
+      if (data != null) {
+        return Student.fromJson(data);
+      }
+    }
+    return null;
   }
+
+  SettingsPageViewModel._init({required this.context});
 }
