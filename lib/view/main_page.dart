@@ -71,7 +71,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
             const SizedBox(height: 16),
             MaterialButton(
-              onPressed: () => context.push('/settings'),
+              onPressed: () => context.push('/attendance'),
               minWidth: double.infinity,
               height: 64,
               color: Colors.blue,

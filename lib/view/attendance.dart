@@ -26,7 +26,7 @@ class AttendancePage extends StatelessWidget {
                 lectureName: '찾을 수 없음',
               ),
             ),
-            if (uuid != null) Text('uuid : $uuid'),
+            Text('uuid : $uuid'),
           ],
         ),
       ),

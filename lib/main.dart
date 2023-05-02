@@ -42,25 +42,12 @@ class App extends StatelessWidget {
             ),
         routes: [
           GoRoute(
-            path: 'attendance:id',
+            path: 'attendance/:id',
             // 여기서 pageBuilder를 사용할 수도 있는데, 페이지 전환 커스텀 애니메이션을 만들 수 있다는 장점이 있다고 한다.
             // 그런 경우에는 AttendancePage를 MaterialPage로 묶어야 한다.
             builder: (context, state) {
               String? uuid = state.params['id'];
-
-              if (uuid == null) {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return AlertDialog(
-                      title: Text('오류'),
-                      content: Text('id 값이 null입니다.'),
-                    );
-                  },
-                );
-                return Container();
-              }
-              return AttendancePage(uuid: uuid);
+              return AttendancePage(uuid: uuid!);
             },
           ),
           GoRoute(
