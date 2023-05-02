@@ -32,7 +32,7 @@ class App extends StatelessWidget {
         redirect: (context, state) async {
           var link = await FirebaseDynamicLinks.instance.getInitialLink();
           if (link != null && link.link.path == 'attendance') {
-            return '/attendance:${link.link.queryParameters['id']}';
+            return '/attendance/:${link.link.queryParameters['id']}';
           } else {
             return null;
           }
