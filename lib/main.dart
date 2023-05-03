@@ -1,5 +1,6 @@
-import 'package:check_attendance_student/firebase_options.dart';
-import 'package:check_attendance_student/view/attendance.dart';
+import 'package:check_attendance_student/view/register_device.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
 import 'package:check_attendance_student/view/main_page.dart';
