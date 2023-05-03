@@ -42,3 +42,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Hiding Firebase key
+/ios/firebase_app_id_file.json
+/lib/firebase_options.dart
+/android/app/google-services.json
+/ios/Runner/GoogleService-Info.plist
+/android/app/suvid-18-firebase-adminsdk-ujqfc-091190ece5.json
