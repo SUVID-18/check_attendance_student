@@ -3,10 +3,13 @@ import 'package:check_attendance_student/view/attendance.dart';
 import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
 import 'package:check_attendance_student/view/main_page.dart';
-import 'package:check_attendance_student/view/register_device.dart';
 import 'package:check_attendance_student/view/settings_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -37,10 +40,13 @@ class App extends StatelessWidget {
       builder: (context, state) => const RegisterDevicePage(),
     ),
     GoRoute(
-        redirect: (context, state) {
+        redirect: (context, state) async {
+          var link = await FirebaseDynamicLinks.instance.getInitialLink();
           if (FirebaseAuth.instance.currentUser == null) {
             return '/login';
-          } else {
+          } else if (link != null && link.link.path == 'attendance') {
+            return '/attendance/${link.link.queryParameters['id']}';
+          } {
             return null;
           }
         },
@@ -50,16 +56,25 @@ class App extends StatelessWidget {
             ),
         routes: [
           GoRoute(
+            path: 'attendance/:id',
+            // 여기서 pageBuilder를 사용할 수도 있는데, 페이지 전환 커스텀 애니메이션을 만들 수 있다는 장점이 있다고 한다.
+            // 그런 경우에는 AttendancePage를 MaterialPage로 묶어야 한다.
+            builder: (context, state) {
+              String? uuid = state.params['id'];
+              return AttendancePage(uuid: uuid!);
+            },
+          ),
+          GoRoute(
+            path: 'login',
+            builder: (context, state) => const LoginPage(),
+          ),
+          GoRoute(
             path: 'settings',
             builder: (context, state) => const SettingsPage(),
           ),
           GoRoute(
             path: 'history',
             builder: (context, state) => const AttendanceHistoryPage(),
-          ),
-          GoRoute(
-            path: 'attendance',
-            builder: (context, state) => const AttendancePage(),
           ),
         ]),
   ]);
@@ -70,7 +85,7 @@ class App extends StatelessWidget {
       title: appName,
       routerConfig: _routes,
       theme: ThemeData(
-          // Material3 테마를 사용할지에 대한 여부
+        // Material3 테마를 사용할지에 대한 여부
           useMaterial3: true),
     );
   }
