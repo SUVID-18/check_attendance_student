@@ -3,11 +3,9 @@ import 'package:check_attendance_student/view/attendance.dart';
 import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
 import 'package:check_attendance_student/view/main_page.dart';
+import 'package:check_attendance_student/view/register_device.dart';
 import 'package:check_attendance_student/view/settings_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
@@ -44,9 +42,10 @@ class App extends StatelessWidget {
           var link = await FirebaseDynamicLinks.instance.getInitialLink();
           if (FirebaseAuth.instance.currentUser == null) {
             return '/login';
+            // 로그인이 안되어있으면 출결 페이지 안띄움
           } else if (link != null && link.link.path == 'attendance') {
             return '/attendance/${link.link.queryParameters['id']}';
-          } {
+          } else {
             return null;
           }
         },
