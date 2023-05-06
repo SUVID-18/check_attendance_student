@@ -11,6 +11,9 @@ class RegisterDeviceViewModel {
   /// 학번에 해당되는 컨트롤러
   final studentIDController = TextEditingController();
 
+  /// 이메일에 해당되는 컨트롤러
+  final emailController = TextEditingController();
+
   static final RegisterDeviceViewModel _instance =
       RegisterDeviceViewModel._init();
 
@@ -30,7 +33,7 @@ class RegisterDeviceViewModel {
   ///```
   factory RegisterDeviceViewModel() => _instance;
 
-  /// 기기변경 페이지에서 기기변경 버튼을 누른 경우 수행할 동작
+  /// 기기변경 페이지에서 기기등록 버튼을 누른 경우 수행할 동작
   ///
   /// 기기변경 버튼의 `onPressed`에 해당 메서드를 등록하면 된다.
   /// 입력칸 중 하나라도 비어있을 시 [loginBlankDialog]에 제공된 `Dialog`를 띄우고
@@ -51,6 +54,7 @@ class RegisterDeviceViewModel {
   ///              ])),
   ///      child: Text('기기 등록'))
   ///```
+  ///
   void onSubmitPressed(
       {required BuildContext context, required AlertDialog loginBlankDialog}) {
     if (nameController.text.isEmpty ||

@@ -15,6 +15,8 @@ class MainPage extends StatelessWidget {
 
   static const String _title = 'Flutter Code Sample';
 
+  ///min
+
   @override
   Widget build(BuildContext context) {
     return const MaterialApp(
@@ -70,7 +72,7 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
 
             MaterialButton(
               child: Text('디바이스 등록 페이지로'),
-              onPressed: () => context.push('/settings/register_device'),
+              onPressed: () => context.push('/register_device'),
               minWidth: double.infinity,
               height: 64,
               color: Colors.blue,
