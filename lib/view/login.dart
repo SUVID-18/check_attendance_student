@@ -70,18 +70,6 @@ class _LoginPageState extends State<LoginPage> {
                   ///pop기능 사용시 페이지 이동이 꼬여서 context.push이용
                   ///잘못된 정보 입력시 AlertDialog뜨도록 구현해놓음
                   ElevatedButton(onPressed: (){
-                    //showDialog(
-                    //       context: context,
-                    //       builder: (BuildContext context)=>AlertDialog(
-                    //       title: Text('로그인 실패'),
-                    //       content: Text('ID나 비밀번호가 없거나 잘못되었습니다'),
-                    //       actions: <Widget>[
-                    //                   TextButton(onPressed: ()=> Navigator.pop(context),
-                    //                   child: Text('확인'))
-                    //                  ]
-                    //                 )
-                    //                );
-                    //Navigator.pop(context,"/");
                     context.push('/');
                   }, child: Text('Next'))
                 ],
