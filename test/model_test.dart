@@ -27,26 +27,30 @@ void main() {
   });
   group('강의 정보 객체 테스트', () {
     test('강의 객체가 정상적으로 생성되는지 테스트', () {
-      const lecture = Lecture(id: '18000000',
+      const lecture = Lecture(
+          id: '18000000',
           name: 'Flutter의 개발과 이해',
           department: '컴퓨터학부',
           subject: '컴퓨터SW',
           room: 'IT 000호',
           professorId: '18000000',
-          startLesson: 3,
-          endLesson: 5,
+          dayWeek: 1,
+          startLesson: '11:15:00.000000',
+          endLesson: '13:20:00.000000',
           validTime: 20);
       expect(lecture.name, 'Flutter의 개발과 이해');
     });
     test('강의 객체의 직렬화 테스트', () {
-      const lecture = Lecture(id: '18000000',
+      const lecture = Lecture(
+          id: '18000000',
           name: 'Flutter의 개발과 이해',
           department: '컴퓨터학부',
           subject: '컴퓨터SW',
           room: 'IT 000호',
           professorId: '18000000',
-          startLesson: 3,
-          endLesson: 5,
+          dayWeek: 1,
+          startLesson: '11:15:00.000000',
+          endLesson: '13:20:00.000000',
           validTime: 20);
       final jsonData = jsonEncode(lecture);
       expect(lecture.id, Lecture.fromJson(jsonDecode(jsonData)).id);
