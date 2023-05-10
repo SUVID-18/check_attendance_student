@@ -67,8 +67,8 @@ class AttendanceInformation {
   /// ```
   factory AttendanceInformation.fromJson(Map<String, dynamic> json) =>
       AttendanceInformation(
-          subjectName: json['subjectName'],
-          professorName: json['professorName'],
+          subjectName: json['subject_name'],
+          professorName: json['professor_name'],
           result: AttendanceResult.values.byName(json['result']));
 
   /// 객체를 `JSON`으로 직렬화 하는 메서드
@@ -79,9 +79,10 @@ class AttendanceInformation {
   /// ```dart
   /// String json = jsonEncode(lecture);
   /// ```
-  Map<String, dynamic> toJson() => {
-        'subjectName': subjectName,
-        'professorName': professorName,
-    'result': result.name
+  Map<String, dynamic> toJson() =>
+      {
+        'subject_name': subjectName,
+        'professor_name': professorName,
+        'result': result.name
       };
 }
