@@ -11,7 +11,7 @@ void main() {
       final student = Student(
           studentId: '18017xxx',
           department: '컴퓨터학부',
-          subject: '컴퓨터 SW',
+          major: '컴퓨터 SW',
           name: '수원대');
       expect(student.name, '수원대');
     });
@@ -19,7 +19,7 @@ void main() {
       final student = Student(
           studentId: '18017xxx',
           department: '컴퓨터학부',
-          subject: '컴퓨터 SW',
+          major: '컴퓨터 SW',
           name: '수원대');
       final jsonData = jsonEncode(student);
       expect(student, Student.fromJson(jsonDecode(jsonData)));
