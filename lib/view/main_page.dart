@@ -48,20 +48,25 @@ class _MyStatefulWidgetState extends State<MyStatefulWidget>
           mainAxisAlignment: MainAxisAlignment.center, // 컨텐츠를 수직 가운데 정렬
           crossAxisAlignment: CrossAxisAlignment.stretch, // 컨텐츠를 수평으로 꽉 채우기
           children: [
-            Image(image: NetworkImage('https://www.suwon.ac.kr/usr/images/suwon/ui_img09.png')),
-            Text('페이지 이동 버튼 모음',
-              style: Theme.of(context).textTheme.headline4, // headlineLarge -> headline4 로 변경
+            Image.asset('assets/images/swu_horizontalLogo.png'),
+            Text(
+              '페이지 이동 버튼 모음',
+              style: Theme.of(context)
+                  .textTheme
+                  .headline4, // headlineLarge -> headline4 로 변경
               textAlign: TextAlign.center, // 텍스트를 중앙 정렬
             ),
-
 
             SizedBox(height: 32), // 버튼과 텍스트 사이 여백 추가
             MaterialButton(
               child: Text('로그인/로그아웃 페이지로'),
               onPressed: () => context.push('/login'),
-              minWidth: double.infinity, // 버튼의 최소 너비를 부모 컨테이너와 같게 설정
-              height: 64, // 버튼의 고정된 높이 설정
-              color: Colors.blue, // 버튼 색상 변경
+              minWidth: double.infinity,
+              // 버튼의 최소 너비를 부모 컨테이너와 같게 설정
+              height: 64,
+              // 버튼의 고정된 높이 설정
+              color: Colors.blue,
+              // 버튼 색상 변경
               textColor: Colors.white, // 버튼 텍스트 색상 변경
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8), // 버튼의 모서리 둥글게 처리

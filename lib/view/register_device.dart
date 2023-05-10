@@ -16,7 +16,7 @@ class RegisterDevicePage extends StatefulWidget {
 }
 
 class _RegisterDevicePageState extends State<RegisterDevicePage> {
-  var viewModel = RegisterDeviceViewModel();
+  late var viewModel = RegisterDeviceViewModel(context: context);
 
   /// 이름에 해당되는 변수
   String name = '';
@@ -65,26 +65,27 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
                 labelText: '학생번호',
                 hintText: '학생번호를 입력하세요.',
               ),
-          controller: viewModel.studentIDController,
+              controller: viewModel.studentIDController,
             ),
 
-        const SizedBox(height: 16),
-        TextField(
-          decoration: const InputDecoration(
-            labelText: '이메일',
-            hintText: '이메일을 입력하세요.',
-          ),
-            controller: viewModel.emailController
-        ),
+            const SizedBox(height: 16),
+            TextField(
+              decoration: const InputDecoration(
+                labelText: '이메일',
+                hintText: '이메일을 입력하세요.',
+              ),
+              controller: viewModel.emailController,
+            ),
 
             ///만약 입력한 값이 없을때 띄워주는 안내창 생성.
             const SizedBox(height: 32),
             ElevatedButton(
               onPressed: () {
-                viewModel.onSubmitPressed(context: context, loginBlankDialog: AlertDialog(
-                    title: Text('안내'),
-                    content: Text('모든 항목을 입력하십시오'),
-                    actions:  [
+                viewModel.onSubmitPressed(
+                    blankDialog: AlertDialog(
+                        title: Text('안내'),
+                        content: Text('모든 항목을 입력하십시오'),
+                        actions: [
                       TextButton(
                           onPressed: () => Navigator.pop(context),
                           child: Text('확인'))
