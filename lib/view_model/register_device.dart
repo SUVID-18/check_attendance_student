@@ -14,9 +14,6 @@ class RegisterDeviceViewModel {
   /// 학번에 해당되는 컨트롤러
   final studentIDController = TextEditingController();
 
-  /// 이메일 해당되는 컨트롤러
-  final emailController = TextEditingController();
-
   /// 특정 메서드에서 위젯을 띄우기 위한 [BuildContext]
   final BuildContext context;
 
