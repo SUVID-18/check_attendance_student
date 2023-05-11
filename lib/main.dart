@@ -84,7 +84,7 @@ class App extends StatelessWidget {
       title: appName,
       routerConfig: _routes,
       theme: ThemeData(
-        // Material3 테마를 사용할지에 대한 여부
+          // Material3 테마를 사용할지에 대한 여부
           useMaterial3: true),
     );
   }

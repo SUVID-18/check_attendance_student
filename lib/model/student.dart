@@ -14,7 +14,7 @@ class Student {
   final String department;
 
   /// 학생의 학과
-  final String subject;
+  final String major;
 
   /// 학생의 이름
   final String name;
@@ -23,11 +23,11 @@ class Student {
 
   /// 학생 객체를 생성한다.
   ///
-  /// [studentId], [department], [subject], [name]에 학생 인적 사항에 대한 정보를 넣는다.
+  /// [studentId], [department], [major], [name]에 학생 인적 사항에 대한 정보를 넣는다.
   Student(
       {required this.studentId,
       required this.department,
-      required this.subject,
+      required this.major,
       required this.name});
 
   /// [json]에서 객체를 역직렬화 하는 경우(학생 객체로 가져오기) 사용되는 `factory` 생성자
@@ -45,24 +45,27 @@ class Student {
   ///   );
   /// ```
   factory Student.fromJson(Map<String, dynamic> json) => Student(
-      studentId: json['studentId'],
+      studentId: json['student_id'],
       department: json['department'],
-      subject: json['subject'],
+      major: json['major'],
       name: json['name']);
 
   /// 객체를 `JSON`으로 직렬화 하는 메서드
   ///
   /// 객체를 `Firestore`에게 쉽게 올릴 수 있도록 직렬화를 수행한다.
   /// 이 메서드는 별도로 호출될 필요 없이 `jsonEncode()`메서드에 사용된다.
+  /// Firestore에 처음으로 올릴 시 사용되는 메서드이기에 첫 가입 구분을 위해 `is_first`속성을 true로 올린다.
   ///
   /// ```dart
   /// String json = jsonEncode(student);
   /// ```
-  Map<String, dynamic> toJson() => {
-        'studentId': studentId,
-        'attendanceStudentId': attendanceStudentId,
+  Map<String, dynamic> toJson() =>
+      {
+        'is_first': true,
+        'student_id': studentId,
+        'device_uuid': attendanceStudentId,
         'department': department,
-        'subject': subject,
+        'major': major,
         'name': name
       };
 

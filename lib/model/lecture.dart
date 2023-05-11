@@ -21,6 +21,9 @@ class Lecture {
   /// 강의를 가르치는 교수의 번호
   final String professorId;
 
+  /// 강의 진행 요일(0: 월요일, 6: 일요일)
+  final int dayWeek;
+
   /// 시작 교시
   final String startLesson;
 
@@ -81,15 +84,18 @@ class Lecture {
   /// ```dart
   /// String json = jsonEncode(lecture);
   /// ```
-  Map<String, dynamic> toJson() => {
+  @Deprecated('해당 메서드는 다음 버전에 제거됩니다.')
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'name': name,
         'department': department,
         'major': major,
         'room': room,
-        'professorId': professorId,
-        'startLesson': startLesson,
-        'endLesson': endLesson,
-        'validTime': validTime
+        'professor_id': professorId,
+        'day_week': dayWeek,
+        'start_at': startLesson,
+        'end_at': endLesson,
+        'valid_time': validTime
       };
 }
