@@ -7,7 +7,7 @@ class LoginViewModel {
   final usernameController = TextEditingController();
 
   /// 사용자 비밀번호에 해당되는 컨트롤러
-  final passwordController = TextEditingController();
+  /// final passwordController = TextEditingController();
 
   static final LoginViewModel _instance = LoginViewModel._init();
 
@@ -50,7 +50,7 @@ class LoginViewModel {
   ///```
   void onSubmitPressed(
       {required BuildContext context, required AlertDialog loginBlankDialog}) {
-    if (usernameController.text.isEmpty || passwordController.text.isEmpty) {
+    if (usernameController.text.isEmpty) {
       showDialog(
         context: context,
         builder: (context) => loginBlankDialog,

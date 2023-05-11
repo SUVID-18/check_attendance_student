@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../view_model/attendance_history.dart';
 
 /// 출결 기록을 확인하는 페이지 입니다.
 ///
@@ -10,17 +11,10 @@ class AttendanceHistoryPage extends StatefulWidget {
   @override
   State<AttendanceHistoryPage> createState() => _AttendanceHistoryPageState();
 }
-
+///viewmodel
+var viewModel = AttendanceHistoryViewModel();
 
 class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
-  ///강의실 리스트
-  ///강의실 번호, 과목명, 교수 이름, 출석여부가 포함되어있는 리스트임
-  List<Map<String, dynamic>> _dataList = [
-    {'number': '201호', 'subject': '소프트웨어 공학','professor': '고혁진 교수' ,'attendanceCheck': '출석'},
-    {'number': '202호', 'subject': '프로그래밍 언어론','professor': '조영일 교수', 'attendanceCheck': '지각'},
-    {'number': '303호', 'subject': '캡스톤 설계','professor': '문승진 교수', 'attendanceCheck': '출석'},
-  ];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +33,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
       //ListView를 사용해 리스트를 동적으로 나타내도록 함
       body: ListView.builder(
         ///리스트의 길이 만큼 카운트
-        itemCount: _dataList.length,
+        itemCount: viewModel.attendanceHistoryList.length,
 
         ///위젯을 인덱스 만큼 만들도록 함
         itemBuilder: (context, index) {
@@ -53,9 +47,9 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                           title: Text("출결 정보"),
                           content: Column(
                             children: [
-                              Text("과목명: "+_dataList[index]['subject']),
-                              Text("교수 명: "+_dataList[index]['professor']),
-                              Text("출석 여부: "+_dataList[index]['attendanceCheck'])
+                              Text("교수명: "+viewModel.attendanceHistoryList[index].professorName),
+                              Text("과목명: "+viewModel.attendanceHistoryList[index].subjectName),
+                              Text(viewModel.attendanceHistoryList[index].result.toString()),
                             ]
                           ),
                           ///확인 버튼임
@@ -69,15 +63,17 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
               );
             },
             ///실제 나타나는 출결 목록들
-            child: Column(
-              children: [
-                Text(_dataList[index]['number']),
-                Text(_dataList[index]['subject']),
-                Text(_dataList[index]['attendanceCheck']),
+            child: Card(
+                child:
+                  Column(
+                  children: [
+                Text(viewModel.attendanceHistoryList[index].professorName),
+                Text(viewModel.attendanceHistoryList[index].subjectName),
+                Text(viewModel.attendanceHistoryList[index].result.toString()),
                 SizedBox(height: 30),
               ],
             ),
-          );
+          ));
         },
       ),
     );

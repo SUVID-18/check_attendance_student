@@ -4,7 +4,7 @@ import 'package:check_attendance_student/model/attendance_information.dart';
 import 'package:check_attendance_student/model/lecture.dart';
 import 'package:check_attendance_student/model/student.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:uuid/uuid.dart';
+import "package:uuid/uuid.dart";
 
 void main() {
   group('학생 객체 테스트', () {
