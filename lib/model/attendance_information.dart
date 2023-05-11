@@ -36,6 +36,9 @@ class AttendanceInformation {
   /// 교수(강의자)의 이름
   final String professorName;
 
+  /// 출결 일시
+  final DateTime attendanceDate;
+
   /// 출결 여부
   final AttendanceResult result;
 
@@ -49,6 +52,7 @@ class AttendanceInformation {
   const AttendanceInformation(
       {required this.subjectName,
       required this.professorName,
+      required this.attendanceDate,
       required this.result});
 
   /// [json]에서 객체를 역직렬화 하는 경우(출결 여부를 가진 객체로 가져오기) 사용되는 `factory` 생성자
@@ -69,6 +73,8 @@ class AttendanceInformation {
       AttendanceInformation(
           subjectName: json['subject_name'],
           professorName: json['professor_name'],
+          attendanceDate: DateTime.fromMillisecondsSinceEpoch(
+              (json['timestamp'] * 1000).toInt()),
           result: AttendanceResult.values.byName(json['result']));
 
   /// 객체를 `JSON`으로 직렬화 하는 메서드
@@ -79,10 +85,10 @@ class AttendanceInformation {
   /// ```dart
   /// String json = jsonEncode(lecture);
   /// ```
-  Map<String, dynamic> toJson() =>
-      {
+  Map<String, dynamic> toJson() => {
         'subject_name': subjectName,
         'professor_name': professorName,
+        'timestamp': attendanceDate.millisecondsSinceEpoch,
         'result': result.name
       };
 }

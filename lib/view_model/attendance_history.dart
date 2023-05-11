@@ -18,17 +18,23 @@ class AttendanceHistoryViewModel {
   List<AttendanceInformation> get attendanceHistoryList =>
       _attendanceHistoryList;
   final List<AttendanceInformation> _attendanceHistoryList = [
-    const AttendanceInformation(
+     AttendanceInformation(
         subjectName: '소프트웨어 공학',
         professorName: '고혁진',
+        attendanceDate: DateTime.fromMillisecondsSinceEpoch(
+            (1683786093.239928 * 1000).toInt()),
         result: AttendanceResult.normal),
-    const AttendanceInformation(
+    AttendanceInformation(
         subjectName: '프로그래밍 언어론',
         professorName: '조영일',
+        attendanceDate: DateTime.fromMillisecondsSinceEpoch(
+            (1683786093.239928 * 1000).toInt()),
         result: AttendanceResult.tardy),
-    const AttendanceInformation(
+    AttendanceInformation(
         subjectName: '캡스톤 설계',
         professorName: '문승진',
+        attendanceDate: DateTime.fromMillisecondsSinceEpoch(
+            (1683786093.239928 * 1000).toInt()),
         result: AttendanceResult.normal),
   ];
 

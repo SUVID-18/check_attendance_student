@@ -58,16 +58,20 @@ void main() {
   });
   group('출결 여부를 가진 객체 테스트', () {
     test('출결 여부를 가진 객체가 생성되는지 테스트', () {
-      const attendanceInfo = AttendanceInformation(
+      var attendanceInfo = AttendanceInformation(
           subjectName: '프로그래밍 언어론',
           professorName: '조영일',
+          attendanceDate: DateTime.fromMillisecondsSinceEpoch(
+              (1683786093.239928 * 1000).toInt()),
           result: AttendanceResult.normal);
       expect(attendanceInfo.subjectName, '프로그래밍 언어론');
     });
     test('출결 여부를 가진 객체의 직렬화 테스트', () {
-      const attendanceInfo = AttendanceInformation(
+      var attendanceInfo = AttendanceInformation(
           subjectName: '프로그래밍 언어론',
           professorName: '조영일',
+          attendanceDate: DateTime.fromMillisecondsSinceEpoch(
+              (1683786093.239928 * 1000).toInt()),
           result: AttendanceResult.normal);
       final jsonData = jsonEncode(attendanceInfo);
       expect(attendanceInfo.professorName,
