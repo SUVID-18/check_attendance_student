@@ -43,13 +43,12 @@ class AttendanceViewModel {
   ///
   Future<HttpsCallableResult> onSubmit() async {
     var preference = await SharedPreferences.getInstance();
-    // TODO: 실질적인 토큰이 생성될 화면 정하기
     var deviceToken = preference.getString('attendanceStudentId');
     return FirebaseFunctions.instance
         .httpsCallableFromUrl(
             'https://check-attendance-jygftfr24a-uc.a.run.app')
         .call({
-      'device_uuid': 'df9TYkja-jsj2',
+      'device_uuid': deviceToken,
       'tag_uuid': uuid,
     });
   }
@@ -69,7 +68,7 @@ class AttendanceViewModel {
         .where('day_week', isEqualTo: now.weekday - 1)
         .where('start_at',
             isGreaterThan:
-                '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}.${now.millisecond.toString().padLeft(2, '0')}')
+                '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}.${now.millisecond.toString().padLeft(6, '0')}')
         .get();
     if (query.docs.isEmpty) {
       return null;

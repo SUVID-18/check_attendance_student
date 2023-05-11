@@ -1,8 +1,11 @@
+import 'package:check_attendance_student/model/student.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:uuid/uuid.dart';
 
 /// 로그인 페이지의 동작을 담당하는 클래스
 class LoginViewModel with WidgetsBindingObserver {
@@ -78,9 +81,8 @@ class LoginViewModel with WidgetsBindingObserver {
         FirebaseDynamicLinks.instance.onLink.listen((event) {
           _passwordlessLogin(event);
         });
-      } catch (error) {
-        // 사실상 뜨면 안되는 오류
-        print(error);
+      } catch (_) {
+        throw Exception('Dynamic Link 관련 처리작업 실패');
       }
     }
   }
@@ -91,11 +93,11 @@ class LoginViewModel with WidgetsBindingObserver {
       showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (context) => Dialog(
+        builder: (context) => const Dialog(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Row(
-              children: const [
+              children: [
                 CircularProgressIndicator.adaptive(),
                 Text('  로그인 중...')
               ],
@@ -104,10 +106,24 @@ class LoginViewModel with WidgetsBindingObserver {
         ),
       );
       try {
-        await FirebaseAuth.instance
+        UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailLink(
-                email: _emailController.text, emailLink: event.link.toString())
-            .then((_) {});
+                email: _emailController.text, emailLink: event.link.toString());
+
+        var db = FirebaseFirestore.instance.collection('students');
+        var document = await db.doc(userCredential.user!.uid).get();
+        // 사용자의 객체가 서버에 등록이 되어있지 않은 경우 학생 객체 생성 및 전송
+        if (!document.exists) {
+          var student = Student(
+              studentId: const Uuid().v4(),
+              department: const Uuid().v4(),
+              major: const Uuid().v4(),
+              name: const Uuid().v4());
+          var preference = await SharedPreferences.getInstance();
+          await preference.setString(
+              'attendanceStudentId', student.attendanceStudentId);
+          db.doc(userCredential.user!.uid).set(student.toJson());
+        }
 
         if (context.mounted) {
           Navigator.pop(context);
@@ -123,7 +139,7 @@ class LoginViewModel with WidgetsBindingObserver {
         Navigator.pop(context);
         if (context.mounted) {
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-              content: const Text('로그인에 실패하였습니다.'),
+              content: Text('로그인에 실패하였습니다.: ${err.toString()}'),
               duration: const Duration(seconds: 1),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -163,11 +179,11 @@ class LoginViewModel with WidgetsBindingObserver {
       showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (context) => Dialog(
+        builder: (context) => const Dialog(
           child: Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding: EdgeInsets.all(8.0),
             child: Row(
-              children: const [
+              children: [
                 CircularProgressIndicator.adaptive(),
                 Text('  로그인 링크 제작 중...')
               ],
@@ -182,8 +198,8 @@ class LoginViewModel with WidgetsBindingObserver {
           androidInstallApp: true);
       FirebaseAuth.instance
           .sendSignInLinkToEmail(
-              email: emailController.text,
-              actionCodeSettings: actionCodeSettings)
+          email: emailController.text,
+          actionCodeSettings: actionCodeSettings)
           .catchError((error) {
         Navigator.pop(context);
         showDialog(

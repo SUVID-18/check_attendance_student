@@ -54,12 +54,14 @@ class Student {
   ///
   /// 객체를 `Firestore`에게 쉽게 올릴 수 있도록 직렬화를 수행한다.
   /// 이 메서드는 별도로 호출될 필요 없이 `jsonEncode()`메서드에 사용된다.
+  /// Firestore에 처음으로 올릴 시 사용되는 메서드이기에 첫 가입 구분을 위해 `is_first`속성을 true로 올린다.
   ///
   /// ```dart
   /// String json = jsonEncode(student);
   /// ```
   Map<String, dynamic> toJson() =>
       {
+        'is_first': true,
         'student_id': studentId,
         'device_uuid': attendanceStudentId,
         'department': department,
