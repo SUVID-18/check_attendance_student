@@ -33,8 +33,8 @@ class _LoginPageState extends State<LoginPage> {
                   Text('수원대 전자출결 앱', style: TextStyle(fontSize: 30),),
                 ],
               ),
-              ///아이디 및 비밀번호 입력란
-              ///_usernameController 변수 사용
+              ///이메일 입력란
+              ///usernameController 변수 사용
               SizedBox(height: 60.0,),
               TextField(
                 controller: viewModel.usernameController,
