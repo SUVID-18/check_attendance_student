@@ -11,6 +11,7 @@ class AttendanceHistoryPage extends StatefulWidget {
   @override
   State<AttendanceHistoryPage> createState() => _AttendanceHistoryPageState();
 }
+
 ///viewmodel
 var viewModel = AttendanceHistoryViewModel();
 
@@ -22,13 +23,9 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
       appBar: AppBar(
           title: Text("출결 기록 페이지"),
           leading: IconButton(
-            onPressed: ()=>Navigator.pop(context,"/"),
-            icon: Icon(
-                Icons.arrow_back,
-                color: Colors.black
-            ),
-          )
-      ),
+            onPressed: () => Navigator.pop(context, "/"),
+            icon: Icon(Icons.arrow_back, color: Colors.black),
+          )),
 
       //ListView를 사용해 리스트를 동적으로 나타내도록 함
       body: ListView.builder(
@@ -40,43 +37,61 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
           ///출결 한 기록을 탭하여 세부 정보를 볼 수 있는 gesturedetector
           ///alertDialog를 통해 강의실 번호를 입력 받아 확인시 업로드가 된다
           return GestureDetector(
-            onTap: (){
-              showDialog(context: context,
-                  builder: (BuildContext context)=>
-                      AlertDialog(
-                          title: Text("출결 정보"),
-                          content: Column(
-                            children: [
-                              Text("교수명: "+viewModel.attendanceHistoryList[index].professorName),
-                              Text("과목명: "+viewModel.attendanceHistoryList[index].subjectName),
-                              Text(viewModel.attendanceHistoryList[index].result.toString()),
-                            ]
-                          ),
-                          ///확인 버튼임
-                          //아직 입력 받아 리스트에 추가하는것 구현 안함
-                          actions: <Widget>[
-                            TextButton(onPressed: (){
-                              Navigator.pop(context);},
-                                child: Text('확인'))
-                          ]
-                    )
-              );
-            },
-            ///실제 나타나는 출결 목록들
-            child: Card(
-                child:
-                  Column(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (BuildContext context) => AlertDialog(
+                            title: Text("출결 정보"),
+                            content: Column(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    "교수명: " + viewModel.attendanceHistoryList[index].professorName,
+                                    style: TextStyle(fontSize: 20.0),
+                                  ),
+                                  Text(
+                                    "과목명: " + viewModel.attendanceHistoryList[index].subjectName,
+                                    style: TextStyle(fontSize: 20.0),
+                                  ),
+                                  Text(
+                                    "출결 여부: "+viewModel.attendanceHistoryList[index].result.toString(),
+                                    style: TextStyle(fontSize: 20.0),
+                                  ),
+                                ]),
+
+                            ///확인 버튼임
+                            //아직 입력 받아 리스트에 추가하는것 구현 안함
+                            actions: <Widget>[
+                              TextButton(
+                                  onPressed: () {
+                                    Navigator.pop(context);
+                                  },
+                                  child: Text('확인'))
+                            ]));
+              },
+
+              ///실제 나타나는 출결 목록들
+              child: Card(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                Text(viewModel.attendanceHistoryList[index].professorName),
-                Text(viewModel.attendanceHistoryList[index].subjectName),
-                Text(viewModel.attendanceHistoryList[index].result.toString()),
-                SizedBox(height: 30),
-              ],
-            ),
-          ));
+                    Text(
+                      viewModel.attendanceHistoryList[index].subjectName,
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                    Text(
+                      viewModel.attendanceHistoryList[index].professorName,
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                    Text(
+                      viewModel.attendanceHistoryList[index].result.toString(),
+                      style: TextStyle(fontSize: 20.0),
+                    ),
+                  ],
+                ),
+              ));
         },
       ),
     );
   }
 }
-

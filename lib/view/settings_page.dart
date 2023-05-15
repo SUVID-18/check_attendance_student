@@ -11,11 +11,11 @@ class SettingsPage extends StatefulWidget {
   @override
   State<SettingsPage> createState() => _SettingsPageState();
 }
+
 ///설정페이지 viewmodel
 var viewModel = SettingsPageViewModel();
 
 class _SettingsPageState extends State<SettingsPage> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -49,7 +49,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 10),
 
               ///계정정보란
-                  /// viewModel 반영
+              /// viewModel 반영
               //터치시 AlertDialog 이용하여 계정정보를 보여줌
               //그냥 쓰니 text overflow가 나서 sizedbox로 감싸고 shrinkwarp사용
               GestureDetector(
@@ -58,16 +58,13 @@ class _SettingsPageState extends State<SettingsPage> {
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
                                 title: const Text("계정정보"),
-                                content: SizedBox(
-                                  width: double.maxFinite,
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    children: [
-                                  Text('이름: ${viewModel.userName}'),
-                                      Text('학번: ${viewModel.studentId}'),
-                                        Text('전공: ${viewModel.userMajor}'),
-                                    ],
-                                  ),
+                                content: Column(
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text('이름: ${viewModel.userName}'),
+                                    Text('학번: ${viewModel.studentId}'),
+                                    Text('전공: ${viewModel.userMajor}'),
+                                  ],
                                 ),
                                 actions: <Widget>[
                                   TextButton(
@@ -95,7 +92,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ))),
 
               ///로그아웃 란
-                  ///viewModel 반영
+              ///viewModel 반영
               //터치시 AlertDialog이용 로그아웃 여부 질문
               //확인 버튼 터치시 로그인 화면 이동, 취소버튼시 이전화면으로 push처리
               //확인 버튼은 비교적 짙은색의 elevetedbutton, 취소버튼은 textbutton
@@ -112,9 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       child: const Text("취소")),
                                   ElevatedButton(
                                       onPressed: () {
-                                        viewModel.logout(
-                                          context: context
-                                        );
+                                        viewModel.logout(context: context);
                                       },
                                       child: const Text("확인"))
                                 ]));
