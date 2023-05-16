@@ -12,10 +12,10 @@ class SettingsPage extends StatefulWidget {
   State<SettingsPage> createState() => _SettingsPageState();
 }
 
-///설정페이지 viewmodel
-var viewModel = SettingsPageViewModel();
-
 class _SettingsPageState extends State<SettingsPage> {
+  ///설정페이지 viewmodel
+  late var viewModel = SettingsPageViewModel(context: context);
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,9 +61,9 @@ class _SettingsPageState extends State<SettingsPage> {
                                 content: Column(
                                   mainAxisSize: MainAxisSize.min,
                                   children: [
-                                    Text('이름: ${viewModel.userName}'),
-                                    Text('학번: ${viewModel.studentId}'),
-                                    Text('전공: ${viewModel.userMajor}'),
+                                    ///Text('이름: ${viewModel.userName}'),
+                                    ///Text('학번: ${viewModel.studentId}'),
+                                    ///Text('전공: ${viewModel.userMajor}'),
                                   ],
                                 ),
                                 actions: <Widget>[
@@ -109,7 +109,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       child: const Text("취소")),
                                   ElevatedButton(
                                       onPressed: () {
-                                        viewModel.logout(context: context);
+                                        viewModel.logout();
                                       },
                                       child: const Text("확인"))
                                 ]));
