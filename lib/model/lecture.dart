@@ -13,7 +13,7 @@ class Lecture {
   final String department;
 
   /// 강의 수강 대상 학과
-  final String subject;
+  final String major;
 
   /// 강의실
   final String room;
@@ -21,11 +21,14 @@ class Lecture {
   /// 강의를 가르치는 교수의 번호
   final String professorId;
 
+  /// 강의 진행 요일(0: 월요일, 6: 일요일)
+  final int dayWeek;
+
   /// 시작 교시
-  final int startLesson;
+  final String startLesson;
 
   /// 종료 교시
-  final int endLesson;
+  final String endLesson;
 
   /// 출석 유효 시간(분단위)
   final int validTime;
@@ -39,8 +42,9 @@ class Lecture {
       {required this.id,
       required this.name,
       required this.department,
-      required this.subject,
+      required this.major,
       required this.room,
+      required this.dayWeek,
       required this.professorId,
       required this.startLesson,
       required this.endLesson,
@@ -64,12 +68,13 @@ class Lecture {
       id: json['id'],
       name: json['name'],
       department: json['department'],
-      subject: json['subject'],
+      major: json['major'],
       room: json['room'],
-      professorId: json['professorId'],
-      startLesson: json['startLesson'],
-      endLesson: json['endLesson'],
-      validTime: json['validTime']);
+      professorId: json['professor_id'],
+      dayWeek: json['day_week'],
+      startLesson: json['start_at'],
+      endLesson: json['end_at'],
+      validTime: json['valid_time']);
 
   /// 객체를 `JSON`으로 직렬화 하는 메서드
   ///
@@ -79,15 +84,18 @@ class Lecture {
   /// ```dart
   /// String json = jsonEncode(lecture);
   /// ```
-  Map<String, dynamic> toJson() => {
+  @Deprecated('해당 메서드는 다음 버전에 제거됩니다.')
+  Map<String, dynamic> toJson() =>
+      {
         'id': id,
         'name': name,
         'department': department,
-        'subject': subject,
+        'major': major,
         'room': room,
-        'professorId': professorId,
-        'startLesson': startLesson,
-        'endLesson': endLesson,
-        'validTime': validTime
+        'professor_id': professorId,
+        'day_week': dayWeek,
+        'start_at': startLesson,
+        'end_at': endLesson,
+        'valid_time': validTime
       };
 }
