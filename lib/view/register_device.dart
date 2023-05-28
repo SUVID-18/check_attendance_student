@@ -74,7 +74,7 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
                 labelText: '이메일',
                 hintText: '이메일을 입력하세요.',
               ),
-              controller: viewModel.emailController,
+              controller: viewModel.emailIDController,
             ),
 
             ///만약 입력한 값이 없을때 띄워주는 안내창 생성.

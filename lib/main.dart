@@ -5,9 +5,7 @@ import 'package:check_attendance_student/view/login.dart';
 import 'package:check_attendance_student/view/main_page.dart';
 import 'package:check_attendance_student/view/register_device.dart';
 import 'package:check_attendance_student/view/settings_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -38,17 +36,20 @@ class App extends StatelessWidget {
       builder: (context, state) => const RegisterDevicePage(),
     ),
     GoRoute(
-        redirect: (context, state) async {
-          var link = await FirebaseDynamicLinks.instance.getInitialLink();
-          if (FirebaseAuth.instance.currentUser == null) {
-            return '/login';
-            // 로그인이 안되어있으면 출결 페이지 안띄움
-          } else if (link != null && link.link.path == 'attendance') {
-            return '/attendance/${link.link.queryParameters['id']}';
-          } else {
-            return null;
-          }
-        },
+
+        ///차단방지
+        // redirect: (context, state) async {
+        //   var link = await FirebaseDynamicLinks.instance.getInitialLink();
+        //   if (FirebaseAuth.instance.currentUser == null) {
+        //     return '/login';
+        //     // 로그인이 안되어있으면 출결 페이지 안띄움
+        //   } else if (link != null && link.link.path == 'attendance') {
+        //     return '/attendance/${link.link.queryParameters['id']}';
+        //   } else {
+        //     return null;
+        //   }
+        // },
+
         path: '/',
         builder: (context, state) => const MainPage(
               appName: appName,
