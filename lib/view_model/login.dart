@@ -93,7 +93,7 @@ class LoginViewModel with WidgetsBindingObserver {
       showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (context) => Dialog(
+        builder: (context) => const Dialog(
           child: Padding(
             padding: EdgeInsets.all(8.0),
             child: Row(
