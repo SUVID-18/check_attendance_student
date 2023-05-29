@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-
 /// 홈 화면을 나타내는 페이지 입니다.
 ///
 /// 홈 화면에서는 기본적으로 출결을 위한 태그 인식하기 버튼을 누를 수 있으며, 현재 출석을 하는 과목이 표시됩니다.
@@ -29,9 +28,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.center, // 컨텐츠를 수직 가운데 정렬
           crossAxisAlignment: CrossAxisAlignment.stretch, // 컨텐츠를 수평으로 꽉 채우기
           children: [
-            const Image(
-                image: NetworkImage(
-                    'https://www.suwon.ac.kr/usr/images/suwon/ui_img09.png')),
+            Image.asset('assets/images/swu_horizontalLogo.png'),
             Text(
               '페이지 이동 버튼 모음',
               style: Theme.of(context)
