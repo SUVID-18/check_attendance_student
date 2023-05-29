@@ -18,17 +18,6 @@ class RegisterDevicePage extends StatefulWidget {
 class _RegisterDevicePageState extends State<RegisterDevicePage> {
   late var viewModel = RegisterDeviceViewModel(context: context);
 
-  /// 이름에 해당되는 변수
-  String name = '';
-
-  /// 전화번호에 해당되는 변수
-  String phoneNumber = '';
-
-  /// 학번에 해당되는 변수
-  String studentID = '';
-
-  ///이메일에 해당되는 변수
-  String email = '';
 
   @override
   Widget build(BuildContext context) {
