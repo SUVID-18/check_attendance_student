@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
+import '../model/student.dart';
 import '../view_model/settings_page.dart';
 
 /// 앱 내 환경설정에 해당되는 페이지 입니다.
@@ -57,15 +58,60 @@ class _SettingsPageState extends State<SettingsPage> {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                                title: const Text("계정정보"),
-                                content: Column(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    ///Text('이름: ${viewModel.userName}'),
-                                    ///Text('학번: ${viewModel.studentId}'),
-                                    ///Text('전공: ${viewModel.userMajor}'),
-                                  ],
-                                ),
+                            title: const Text("계정정보"),
+
+                                ///정보 받아오기 용 futureBuilder 생성
+                                content: FutureBuilder<Student?>(
+                                    future: viewModel.getStudentInfo(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<Student?> snapshot) {
+                                      //해당 부분은 data를 아직 받아 오지 못했을 때 실행되는 부분
+                                      if (snapshot.hasData == false) {
+                                        return CircularProgressIndicator(); // CircularProgressIndicator : 로딩 에니메이션
+                                      }
+                                      //error가 발생하게 될 경우 반환하게 되는 부분
+                                      else if (snapshot.hasError) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Error: ${snapshot.error}',
+                                            // 에러명을 텍스트에 뿌려줌
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        );
+                                      }
+                                      // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 부분
+                                      else {
+                                        return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(children: [
+                                              Text(
+                                                snapshot.data?.name ??
+                                                    '이름 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                              Text(
+                                                snapshot.data?.studentId ??
+                                                    '학번 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                              Text(
+                                                snapshot.data?.department ??
+                                                    '학부 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                              Text(
+                                                snapshot.data?.major ??
+                                                    '학과 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                            ]));
+                                      }
+                                    }),
                                 actions: <Widget>[
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),

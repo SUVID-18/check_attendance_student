@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
 import '../view_model/login.dart';
 
 /// 로그인 시 나타나는 페이지 입니다.
@@ -87,8 +87,6 @@ class _LoginPageState extends State<LoginPage> {
                                     onPressed: () => Navigator.pop(context),
                                     child: Text('확인'))
                               ]));
-                      if (viewModel.emailController.text.isNotEmpty)
-                      {Navigator.pop(context,"/");}
                     }
                         , child: Text('Next'))
                   ],
