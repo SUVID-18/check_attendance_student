@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
-
 /// 홈 화면을 나타내는 페이지 입니다.
 ///
 /// 홈 화면에서는 기본적으로 출결을 위한 태그 인식하기 버튼을 누를 수 있으며, 현재 출석을 하는 과목이 표시됩니다.
@@ -29,9 +28,7 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
           mainAxisAlignment: MainAxisAlignment.center, // 컨텐츠를 수직 가운데 정렬
           crossAxisAlignment: CrossAxisAlignment.stretch, // 컨텐츠를 수평으로 꽉 채우기
           children: [
-            const Image(
-                image: NetworkImage(
-                    'https://www.suwon.ac.kr/usr/images/suwon/ui_img09.png')),
+            Image.asset('assets/images/swu_horizontalLogo.png'),
             Text(
               '페이지 이동 버튼 모음',
               style: Theme.of(context)
@@ -68,6 +65,19 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
                 borderRadius: BorderRadius.circular(8),
               ),
               child: const Text('출결 기록 페이지로'),
+            ),
+            const SizedBox(height: 16),
+            MaterialButton(
+              onPressed: () => context
+                  .push('/attendance/5b884f5c-9ee5-49b6-9143-158b4761a8f8'),
+              minWidth: double.infinity,
+              height: 64,
+              color: Colors.blue,
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text('출결 테스트'),
             ),
             const SizedBox(height: 16),
             MaterialButton(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
+
+import '../model/student.dart';
+import '../view_model/settings_page.dart';
 
 /// 앱 내 환경설정에 해당되는 페이지 입니다.
 ///
@@ -12,14 +14,8 @@ class SettingsPage extends StatefulWidget {
 }
 
 class _SettingsPageState extends State<SettingsPage> {
-  ///사용자 이름 변수
-  final _userName = TextEditingController();
-
-  ///사용자 학번 변수
-  final _userNumber = TextEditingController();
-
-  ///사용자 전공 변수
-  final _userMajor = TextEditingController();
+  ///설정페이지 viewmodel
+  late var viewModel = SettingsPageViewModel(context: context);
 
   @override
   Widget build(BuildContext context) {
@@ -54,6 +50,7 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 10),
 
               ///계정정보란
+              /// viewModel 반영
               //터치시 AlertDialog 이용하여 계정정보를 보여줌
               //그냥 쓰니 text overflow가 나서 sizedbox로 감싸고 shrinkwarp사용
               GestureDetector(
@@ -61,17 +58,60 @@ class _SettingsPageState extends State<SettingsPage> {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                                title: const Text("계정정보"),
-                                content: SizedBox(
-                                  width: double.maxFinite,
-                                  child: ListView(
-                                    shrinkWrap: true,
-                                    children: [
-                                      Text(
-                                          "이름: $_userName, 학번: $_userNumber, 소속: $_userMajor")
-                                    ],
-                                  ),
-                                ),
+                            title: const Text("계정정보"),
+
+                                ///정보 받아오기 용 futureBuilder 생성
+                                content: FutureBuilder<Student?>(
+                                    future: viewModel.getStudentInfo(),
+                                    builder: (BuildContext context,
+                                        AsyncSnapshot<Student?> snapshot) {
+                                      //해당 부분은 data를 아직 받아 오지 못했을 때 실행되는 부분
+                                      if (snapshot.hasData == false) {
+                                        return CircularProgressIndicator(); // CircularProgressIndicator : 로딩 에니메이션
+                                      }
+                                      //error가 발생하게 될 경우 반환하게 되는 부분
+                                      else if (snapshot.hasError) {
+                                        return Padding(
+                                          padding: const EdgeInsets.all(8.0),
+                                          child: Text(
+                                            'Error: ${snapshot.error}',
+                                            // 에러명을 텍스트에 뿌려줌
+                                            style: TextStyle(fontSize: 15),
+                                          ),
+                                        );
+                                      }
+                                      // 데이터를 정상적으로 받아오게 되면 다음 부분을 실행하게 되는 부분
+                                      else {
+                                        return Padding(
+                                            padding: const EdgeInsets.all(8.0),
+                                            child: Column(children: [
+                                              Text(
+                                                snapshot.data?.name ??
+                                                    '이름 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                              Text(
+                                                snapshot.data?.studentId ??
+                                                    '학번 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                              Text(
+                                                snapshot.data?.department ??
+                                                    '학부 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                              Text(
+                                                snapshot.data?.major ??
+                                                    '학과 알 수 없음',
+                                                // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
+                                                style: TextStyle(fontSize: 15),
+                                              ),
+                                            ]));
+                                      }
+                                    }),
                                 actions: <Widget>[
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),
@@ -98,6 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
                       ))),
 
               ///로그아웃 란
+              ///viewModel 반영
               //터치시 AlertDialog이용 로그아웃 여부 질문
               //확인 버튼 터치시 로그인 화면 이동, 취소버튼시 이전화면으로 push처리
               //확인 버튼은 비교적 짙은색의 elevetedbutton, 취소버튼은 textbutton
@@ -114,7 +155,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       child: const Text("취소")),
                                   ElevatedButton(
                                       onPressed: () {
-                                        context.go("/login");
+                                        viewModel.logout();
                                       },
                                       child: const Text("확인"))
                                 ]));
