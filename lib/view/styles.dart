@@ -75,11 +75,11 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
             ),
             Text(
               '강의실 이름: ${widget.lectureRoomName}',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
               '과목 이름: ${widget.lectureName}',
-              style: Theme.of(context).textTheme.headline6,
+              style: Theme.of(context).textTheme.titleLarge,
             ),
             const SizedBox(height: 20.0),
             OutlinedButton(

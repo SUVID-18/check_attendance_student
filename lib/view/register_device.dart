@@ -29,6 +29,7 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
         child: Column(
           children: <Widget>[
             const SizedBox(height: 16),
+
             ///이름입력
             TextField(
               decoration: const InputDecoration(
@@ -57,6 +58,7 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
               controller: viewModel.studentIDController,
             ),
 
+            ///이메일 입력
             const SizedBox(height: 16),
             TextField(
               decoration: const InputDecoration(
