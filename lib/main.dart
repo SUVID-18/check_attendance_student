@@ -1,5 +1,6 @@
 import 'package:check_attendance_student/firebase_options.dart';
 import 'package:check_attendance_student/view/attendance.dart';
+import 'package:check_attendance_student/view/attendance_fake.dart';
 import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
 import 'package:check_attendance_student/view/main_page.dart';
@@ -62,6 +63,13 @@ class App extends StatelessWidget {
             builder: (context, state) {
               String? uuid = state.params['id'];
               return AttendancePage(uuid: uuid!);
+            },
+          ),
+          GoRoute(
+            path: 'attendance_fake/:id',
+            builder: (context, state) {
+              String? uuid = state.params['id'];
+              return FakeAttendancePage(uuid: uuid!);
             },
           ),
           GoRoute(
