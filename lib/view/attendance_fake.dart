@@ -33,7 +33,7 @@ class _FakeAttendancePageState extends State<FakeAttendancePage> {
             Padding(
               padding: const EdgeInsets.all(30.0),
               child: FutureBuilder(
-                  future: Future.delayed(Duration(seconds: 1)),
+                  future: Future.delayed(const Duration(seconds: 1)),
                   builder: (context, snapshot) {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());

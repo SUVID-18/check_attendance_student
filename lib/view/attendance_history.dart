@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+
 import '../view_model/attendance_history.dart';
 
 /// 출결 기록을 확인하는 페이지 입니다.
@@ -21,10 +22,10 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
     return Scaffold(
       //appBar 부분
       appBar: AppBar(
-          title: Text("출결 기록 페이지"),
+          title: const Text('출결 기록 페이지'),
           leading: IconButton(
-            onPressed: () => Navigator.pop(context, "/"),
-            icon: Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () => Navigator.pop(context, '/'),
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
           )),
 
       //ListView를 사용해 리스트를 동적으로 나타내도록 함
@@ -41,21 +42,21 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                 showDialog(
                     context: context,
                     builder: (BuildContext context) => AlertDialog(
-                            title: Text("출결 정보"),
+                            title: const Text('출결 정보'),
                             content: Column(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    "교수명: " + viewModel.attendanceHistoryList[index].professorName,
-                                    style: TextStyle(fontSize: 20.0),
+                                    '교수명: ${viewModel.attendanceHistoryList[index].professorName}',
+                                    style: const TextStyle(fontSize: 20.0),
                                   ),
                                   Text(
-                                    "과목명: " + viewModel.attendanceHistoryList[index].subjectName,
-                                    style: TextStyle(fontSize: 20.0),
+                                    '과목명: ${viewModel.attendanceHistoryList[index].subjectName}',
+                                    style: const TextStyle(fontSize: 20.0),
                                   ),
                                   Text(
-                                    "출결 여부: "+viewModel.attendanceHistoryList[index].result.toString(),
-                                    style: TextStyle(fontSize: 20.0),
+                                    '출결 여부: ${viewModel.attendanceHistoryList[index].result}',
+                                    style: const TextStyle(fontSize: 20.0),
                                   ),
                                 ]),
 
@@ -66,7 +67,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                                   onPressed: () {
                                     Navigator.pop(context);
                                   },
-                                  child: Text('확인'))
+                                  child: const Text('확인'))
                             ]));
               },
 
@@ -77,15 +78,15 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                   children: [
                     Text(
                       viewModel.attendanceHistoryList[index].subjectName,
-                      style: TextStyle(fontSize: 20.0),
+                      style: const TextStyle(fontSize: 20.0),
                     ),
                     Text(
                       viewModel.attendanceHistoryList[index].professorName,
-                      style: TextStyle(fontSize: 20.0),
+                      style: const TextStyle(fontSize: 20.0),
                     ),
                     Text(
                       viewModel.attendanceHistoryList[index].result.toString(),
-                      style: TextStyle(fontSize: 20.0),
+                      style: const TextStyle(fontSize: 20.0),
                     ),
                   ],
                 ),

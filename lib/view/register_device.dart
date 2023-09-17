@@ -74,12 +74,12 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
               onPressed: () {
                 viewModel.onSubmitPressed(
                     blankDialog: AlertDialog(
-                        title: Text('안내'),
-                        content: Text('모든 항목을 입력하십시오'),
+                        title: const Text('안내'),
+                        content: const Text('모든 항목을 입력하십시오'),
                         actions: [
                       TextButton(
                           onPressed: () => Navigator.pop(context),
-                          child: Text('확인'))
+                          child: const Text('확인'))
                     ]));
               },
               child: const Text('기기 등록'),

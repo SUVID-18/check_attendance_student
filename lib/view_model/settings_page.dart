@@ -50,11 +50,11 @@ class SettingsPageViewModel {
     showDialog(
       barrierDismissible: false,
       context: context,
-      builder: (context) => Dialog(
+      builder: (context) => const Dialog(
         child: Padding(
-          padding: const EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(8.0),
           child: Row(
-            children: const [
+            children: [
               CircularProgressIndicator.adaptive(),
               Text('  로그아웃 중...')
             ],
