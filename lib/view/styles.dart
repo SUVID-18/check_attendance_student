@@ -105,3 +105,95 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
     );
   }
 }
+
+/// 과목의 정보를 출력하는 용도로 만들어진 위젯
+///
+/// 전체 과목의 목록을 출력하는 타일로 화살표가 가운데 있으며, 터치 시 표시할 내용이 나타난다.
+class SubjectListExpansionTile extends StatefulWidget {
+  /// Creates a widget that insets its child.
+  /// The padding argument must not be null.
+  final Widget child;
+
+  /// 화살표가 가운데 있는 형태의 ExpansionTile이라 보면 된다. [child]에 버튼을 누른 후 표시할
+  /// 위젯을 삽입하면 된다.
+  const SubjectListExpansionTile({required this.child, super.key});
+
+  @override
+  State<SubjectListExpansionTile> createState() =>
+      _SubjectListExpansionTileState();
+}
+
+class _SubjectListExpansionTileState extends State<SubjectListExpansionTile>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _heightFactor;
+  bool _isExpanded = false;
+  static final Animatable<double> _easeInTween =
+      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
+  late Animation<double> _iconTurn;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+    _iconTurn = _animationController.drive(_halfTween.chain(_easeInTween));
+    _heightFactor = _animationController.drive(_easeInTween);
+    _isExpanded =
+        PageStorage.maybeOf(context)?.readState(context) as bool? ?? false;
+    if (_isExpanded) {
+      _animationController.value = 1.0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+        onTap: () {
+          setState(() {
+            _isExpanded = !_isExpanded;
+            if (_isExpanded) {
+              _animationController.forward();
+            } else {
+              _animationController.reverse().then((_) {
+                setState(() {});
+              });
+            }
+          });
+          PageStorage.maybeOf(context)?.writeState(context, _isExpanded);
+        },
+        child: Column(
+          children: [
+            SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: RotationTransition(
+                    turns: _iconTurn, child: Icon(Icons.expand_more)),
+              ),
+            ),
+            AnimatedBuilder(
+              animation: _animationController.view,
+              child: widget.child,
+              builder: (context, child) {
+                return ClipRect(
+                  child: Align(
+                    alignment: Alignment.center,
+                    heightFactor: _heightFactor.value,
+                    child: child,
+                  ),
+                );
+              },
+            )
+          ],
+        ));
+  }
+}
