@@ -43,17 +43,16 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
             const SizedBox(height: 16),
             TextField(
               decoration: const InputDecoration(
-                labelText: '휴대폰 번호',
-                hintText: '휴대폰 번호를 입력하세요.',
-              ),
-           controller: viewModel.phoneNumberController, ),
+                  labelText: '학부', hintText: '대상 학부를 입력하세요'),
+              controller: viewModel.departmentController,
+            ),
 
             ///학번 입력
             const SizedBox(height: 16),
             TextField(
               decoration: const InputDecoration(
-                labelText: '학생번호',
-                hintText: '학생번호를 입력하세요.',
+                labelText: '학번',
+                hintText: '학번을 입력하세요.',
               ),
               controller: viewModel.studentIDController,
             ),
@@ -62,10 +61,10 @@ class _RegisterDevicePageState extends State<RegisterDevicePage> {
             const SizedBox(height: 16),
             TextField(
               decoration: const InputDecoration(
-                labelText: '이메일',
-                hintText: '이메일을 입력하세요.',
+                labelText: '전공',
+                hintText: '전공을 입력하세요.',
               ),
-              controller: viewModel.emailIDController,
+              controller: viewModel.majorController,
             ),
 
             ///만약 입력한 값이 없을때 띄워주는 안내창 생성.
