@@ -110,13 +110,20 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
 ///
 /// 전체 과목의 목록을 출력하는 타일로 화살표가 가운데 있으며, 터치 시 표시할 내용이 나타난다.
 class SubjectListExpansionTile extends StatefulWidget {
-  /// Creates a widget that insets its child.
-  /// The padding argument must not be null.
+  /// 확장될 때 표시할 [Widget]을 추가하는 곳
+  ///
+  /// 확장 아이콘을 누르면 해당 위젯이 출력됩니다. [null]이 될 수 없습니다.
   final Widget child;
+
+  /// 확장 아이콘 위에 나타낼 위젯
+  ///
+  /// 어떤 내용을 표시할 지 나타내는 용도로 사용됩니다. 일반적으로 [Text]가 사용됩니다.
+  final Widget? subTitle;
 
   /// 화살표가 가운데 있는 형태의 ExpansionTile이라 보면 된다. [child]에 버튼을 누른 후 표시할
   /// 위젯을 삽입하면 된다.
-  const SubjectListExpansionTile({required this.child, super.key});
+  const SubjectListExpansionTile(
+      {required this.child, this.subTitle, super.key});
 
   @override
   State<SubjectListExpansionTile> createState() =>
@@ -156,44 +163,49 @@ class _SubjectListExpansionTileState extends State<SubjectListExpansionTile>
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-        onTap: () {
-          setState(() {
-            _isExpanded = !_isExpanded;
-            if (_isExpanded) {
-              _animationController.forward();
-            } else {
-              _animationController.reverse().then((_) {
-                setState(() {});
+    return Column(
+      children: [
+        InkWell(
+            onTap: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+                if (_isExpanded) {
+                  _animationController.forward();
+                } else {
+                  _animationController.reverse().then((_) {
+                    setState(() {});
+                  });
+                }
               });
-            }
-          });
-          PageStorage.maybeOf(context)?.writeState(context, _isExpanded);
-        },
-        child: Column(
-          children: [
-            SizedBox(
+              PageStorage.maybeOf(context)?.writeState(context, _isExpanded);
+            },
+            child: SizedBox(
               width: MediaQuery.of(context).size.width,
               child: Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: RotationTransition(
-                    turns: _iconTurn, child: Icon(Icons.expand_more)),
+                child: Column(
+                  children: [
+                    if (widget.subTitle != null) widget.subTitle!,
+                    RotationTransition(
+                        turns: _iconTurn, child: const Icon(Icons.expand_more)),
+                  ],
+                ),
               ),
-            ),
-            AnimatedBuilder(
-              animation: _animationController.view,
-              child: widget.child,
-              builder: (context, child) {
-                return ClipRect(
-                  child: Align(
-                    alignment: Alignment.center,
-                    heightFactor: _heightFactor.value,
-                    child: child,
-                  ),
-                );
-              },
-            )
-          ],
-        ));
+            )),
+        AnimatedBuilder(
+          animation: _animationController.view,
+          child: widget.child,
+          builder: (context, child) {
+            return ClipRect(
+              child: Align(
+                alignment: Alignment.center,
+                heightFactor: _heightFactor.value,
+                child: child,
+              ),
+            );
+          },
+        )
+      ],
+    );
   }
 }
