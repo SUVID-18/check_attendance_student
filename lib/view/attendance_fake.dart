@@ -38,7 +38,8 @@ class _FakeAttendancePageState extends State<FakeAttendancePage> {
                     if (snapshot.connectionState == ConnectionState.waiting) {
                       return const Center(child: CircularProgressIndicator());
                     } else {
-                      return const CheckAttendanceCard(
+                      return CheckAttendanceCard(
+                        run: viewModel.getAllLectures,
                         lectureRoomName: '정보 없음(테스트)',
                         lectureName: '정보 없음(테스트)',
                       );

@@ -47,6 +47,7 @@ class _AttendancePageState extends State<AttendancePage> {
                       );
                     } else {
                       return CheckAttendanceCard(
+                        run: viewModel.getAllLectures,
                         lectureRoomName: snapshot.data!.room,
                         lectureName: snapshot.data!.name,
                         onAttendance: () async {

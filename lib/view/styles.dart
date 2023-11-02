@@ -1,3 +1,4 @@
+import 'package:check_attendance_student/model/lecture.dart';
 import 'package:flutter/material.dart';
 
 /// 강의실 정보와 출석하기 버튼이 포함된 위젯
@@ -23,11 +24,13 @@ import 'package:flutter/material.dart';
 /// 번 출석 버튼을 누르면 버튼이 비활성화되도록 구현함.
 
 class CheckAttendanceCard extends StatefulWidget {
+  final Future<List<Lecture>?> Function()? run;
   final String lectureRoomName;
   final String lectureName;
   final void Function()? onAttendance;
 
   const CheckAttendanceCard({
+    this.run,
     required this.lectureRoomName,
     required this.lectureName,
     this.onAttendance,
@@ -99,6 +102,20 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
                 ],
               ),
             ),
+            if (widget.run != null)
+              SubjectListExpansionTile(
+                  child: FutureBuilder(
+                future: widget.run!(),
+                // TODO: null처리 및 데이터 출력
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return CircularProgressIndicator.adaptive();
+                  } else if (snapshot.data == null) {
+                  } else {
+                    return Text(snapshot.data!.toString());
+                  }
+                },
+              ))
           ],
         ),
       ),
