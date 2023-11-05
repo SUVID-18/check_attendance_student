@@ -19,6 +19,10 @@ class Student {
   /// 학생의 이름
   final String name;
 
+  /// 학생 객체의 알림용 토큰
+  final String token;
+
+  /// 학생 객체의 기기 식별을 위한 고유 uuid. private 필드이다.
   final String _attendanceStudentId = const Uuid().v4();
 
   /// 학생 객체를 생성한다.
@@ -28,7 +32,7 @@ class Student {
       {required this.studentId,
       required this.department,
       required this.major,
-      required this.name});
+      required this.name, required this.token});
 
   /// [json]에서 객체를 역직렬화 하는 경우(학생 객체로 가져오기) 사용되는 `factory` 생성자
   ///
@@ -48,7 +52,9 @@ class Student {
       studentId: json['student_id'],
       department: json['department'],
       major: json['major'],
-      name: json['name']);
+      name: json['name'],
+      token: json['token']
+  );
 
   /// 객체를 `JSON`으로 직렬화 하는 메서드
   ///
@@ -66,7 +72,8 @@ class Student {
         'device_uuid': attendanceStudentId,
         'department': department,
         'major': major,
-        'name': name
+        'name': name,
+        'token': token
       };
 
   /// 학생이 같은지 판단하기 위한 수단으로 학번을 비교한다.
