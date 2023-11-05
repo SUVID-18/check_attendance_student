@@ -41,12 +41,13 @@ class _AttendancePageState extends State<AttendancePage> {
                     } else if (snapshot.hasError) {
                       return Text(snapshot.error.toString());
                     } else if (snapshot.data == null) {
-                      return CheckAttendanceCard(
+                      return const CheckAttendanceCard(
                         lectureRoomName: '정보 없음',
                         lectureName: '정보 없음',
                       );
                     } else {
                       return CheckAttendanceCard(
+                        getLectureData: viewModel.getAllLectures,
                         lectureRoomName: snapshot.data!.room,
                         lectureName: snapshot.data!.name,
                         onAttendance: () async {
@@ -54,7 +55,8 @@ class _AttendancePageState extends State<AttendancePage> {
                             await viewModel.onSubmit();
                             if (mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('출결이 완료되었습니다.')));
+                                  const SnackBar(
+                                      content: Text('출결이 완료되었습니다.')));
                             }
                           } on FirebaseFunctionsException catch (error) {
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(

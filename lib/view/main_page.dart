@@ -81,6 +81,18 @@ class _MainPageState extends State<MainPage> with TickerProviderStateMixin {
             ),
             const SizedBox(height: 16),
             MaterialButton(
+              onPressed: () => context.push('/attendance_fake/fake_uuid'),
+              minWidth: double.infinity,
+              height: 64,
+              color: Colors.green,
+              textColor: Colors.white,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: const Text('출결 테스트(로컬)'),
+            ),
+            const SizedBox(height: 16),
+            MaterialButton(
               onPressed: () => context.push('/settings'),
               minWidth: double.infinity,
               height: 64,
