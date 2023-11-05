@@ -2,10 +2,8 @@ import 'dart:async';
 
 import 'package:check_attendance_student/firebase_options.dart';
 import 'package:check_attendance_student/view/attendance.dart';
-import 'package:check_attendance_student/view/attendance_fake.dart';
 import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
-import 'package:check_attendance_student/view/main_page.dart';
 import 'package:check_attendance_student/view/register_device.dart';
 import 'package:check_attendance_student/view/settings_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -14,7 +12,6 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/date_symbol_data_local.dart';
 
 /// 릴리즈 모드 여부에 따라 리다이렉트 여부를 지정하는 함수
 ///
@@ -35,10 +32,8 @@ FutureOr<String?> loginRedirect(context, state) async {
   }
 }
 
-//달력 로컬라이징을 위한 async화와 initializeDateFormatting
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(App());
 }
@@ -61,12 +56,9 @@ class App extends StatelessWidget {
       builder: (context, state) => const RegisterDevicePage(),
     ),
     GoRoute(
-        ///차단방지
         redirect: loginRedirect,
         path: '/',
-        builder: (context, state) => const MainPage(
-              appName: appName,
-            ),
+        builder: (context, state) => const AttendanceHistoryPage(),
         routes: [
           GoRoute(
             path: 'attendance/:id',
@@ -78,23 +70,12 @@ class App extends StatelessWidget {
             },
           ),
           GoRoute(
-            path: 'attendance_fake/:id',
-            builder: (context, state) {
-              String? uuid = state.params['id'];
-              return FakeAttendancePage(uuid: uuid!);
-            },
-          ),
-          GoRoute(
             path: 'login',
             builder: (context, state) => const LoginPage(),
           ),
           GoRoute(
             path: 'settings',
             builder: (context, state) => const SettingsPage(),
-          ),
-          GoRoute(
-            path: 'history',
-            builder: (context, state) => const AttendanceHistoryPage(),
           ),
         ]),
   ]);
