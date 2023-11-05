@@ -85,8 +85,10 @@ class _SettingsPageState extends State<SettingsPage> {
                                       else {
                                         return Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Column(children: [
-                                              Text(
+                                            child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
                                                 snapshot.data?.name ??
                                                     '이름 알 수 없음',
                                                 // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
