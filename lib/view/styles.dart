@@ -118,12 +118,18 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
                       child: ListView.builder(
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index){
-                            return ListView(
-                              children: [
-                                Text('강의명: ' + snapshot.data![index].name),
-                                Text('시작 교시: '+ snapshot.data![index].startLesson),
-                                Text('종료 교시: '+ snapshot.data![index].endLesson),
-                              ],
+                            return ListTile(
+                                leading: Icon(Icons.account_balance),
+                                title: Text('강의명: ' + snapshot.data![index].name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                ),
+                                subtitle: Text(
+                                    '시작 교시: ${snapshot.data![index].startLesson}, '
+                                     '종료 교시: ${snapshot.data![index].endLesson}',
+                                    overflow: TextOverflow.clip,
+                                ),
                             );
                         }
                       ),
