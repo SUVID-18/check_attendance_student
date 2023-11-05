@@ -1,5 +1,6 @@
 import 'package:check_attendance_student/model/attendance_information.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 
 import '../view_model/attendance_history.dart';
 
@@ -23,11 +24,12 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
     return Scaffold(
       //appBar 부분
       appBar: AppBar(
-          title: const Text('출결 기록 페이지'),
-          leading: IconButton(
-            onPressed: () => Navigator.pop(context, '/'),
-            icon: const Icon(Icons.arrow_back, color: Colors.black),
-          )),
+          title: const Text('출결 기록 페이지'), actions: [
+        IconButton(
+          onPressed: () => context.push('/settings'),
+          icon: const Icon(Icons.settings, color: Colors.black),
+        )
+      ]),
 
       //ListView를 사용해 리스트를 동적으로 나타내도록 함
       body: FutureBuilder<List<AttendanceInformation>>(
