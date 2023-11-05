@@ -106,12 +106,11 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
               SubjectListExpansionTile(
                   child: FutureBuilder(
                 future: widget.getLectureData!(),
-                // TODO: null처리 및 데이터 출력
                 builder: (context, snapshot) {
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return CircularProgressIndicator.adaptive();
+                    return const CircularProgressIndicator.adaptive();
                   } else if (snapshot.data == null) {
-                    return Text('강의 정보가 없습니다.');
+                    return const Text('강의 정보가 없습니다.');
                   } else {
                     return SizedBox(
                       height: 120,
@@ -119,16 +118,16 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
                           itemCount: snapshot.data!.length,
                           itemBuilder: (context, index){
                             return ListTile(
-                                leading: Icon(Icons.account_balance),
-                                title: Text('강의명: ' + snapshot.data![index].name,
+                              leading: const Icon(Icons.account_balance),
+                              title: Text('강의명: ' + snapshot.data![index].name,
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold
                                     ),
                                 ),
                                 subtitle: Text(
-                                    '시작 교시: ${snapshot.data![index].startLesson}, '
-                                     '종료 교시: ${snapshot.data![index].endLesson}',
-                                    overflow: TextOverflow.clip,
+                                '강의 시작 시간: ${snapshot.data![index].startLesson}, '
+                                '강의 종료 시간: ${snapshot.data![index].endLesson}',
+                                overflow: TextOverflow.clip,
                                 ),
                             );
                         }
