@@ -41,9 +41,10 @@ class _AttendancePageState extends State<AttendancePage> {
                     } else if (snapshot.hasError) {
                       return Text(snapshot.error.toString());
                     } else if (snapshot.data == null) {
-                      return const CheckAttendanceCard(
-                        lectureRoomName: '정보 없음',
-                        lectureName: '정보 없음',
+                      return CheckAttendanceCard(
+                        getLectureData: viewModel.getAllLectures,
+                        lectureRoomName: '현재 강의 정보 없음',
+                        lectureName: '현재 강의 정보 없음',
                       );
                     } else {
                       return CheckAttendanceCard(
@@ -59,8 +60,12 @@ class _AttendancePageState extends State<AttendancePage> {
                                       content: Text('출결이 완료되었습니다.')));
                             }
                           } on FirebaseFunctionsException catch (error) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(error.message ?? '오류가 발생했습니다.')));
+                            if (context.mounted) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          error.message ?? '오류가 발생했습니다.')));
+                            }
                           }
                         },
                       );

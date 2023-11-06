@@ -38,7 +38,7 @@ class CheckAttendanceCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CheckAttendanceCardState createState() => _CheckAttendanceCardState();
+  State<CheckAttendanceCard> createState() => _CheckAttendanceCardState();
 }
 
 class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
