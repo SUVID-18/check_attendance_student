@@ -1,8 +1,9 @@
+import 'dart:async';
+
 import 'package:check_attendance_student/firebase_options.dart';
 import 'package:check_attendance_student/view/attendance.dart';
 import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
-import 'package:check_attendance_student/view/main_page.dart';
 import 'package:check_attendance_student/view/register_device.dart';
 import 'package:check_attendance_student/view/settings_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -14,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:google_api_availability/google_api_availability.dart';
+import 'package:flutter/foundation.dart';
 
 @pragma('vm:entry-point')
 // 백그라운드에서 메세지를 핸들링 하는 프라이빗 메서드
@@ -22,10 +24,27 @@ Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   print('핸들링 메세지 : ${message.messageId}');
 }
 
-//달력 로컬라이징을 위한 async화와 initializeDateFormatting
+/// 릴리즈 모드 여부에 따라 리다이렉트 여부를 지정하는 함수
+///
+/// 릴리즈 모드인 경우 로그인이 되어있지 않은 경우 로그인을 진행하도록 강제한다.
+/// 릴리즈 모드가 아닌 경우 원할한 개발을 위해 로그인 과정을 건너뛴다.
+FutureOr<String?> loginRedirect(context, state) async {
+  if (!kReleaseMode) {
+    return null;
+  }
+  var link = await FirebaseDynamicLinks.instance.getInitialLink();
+  if (FirebaseAuth.instance.currentUser == null) {
+    return '/login';
+    // 로그인이 안되어있으면 출결 페이지 안띄움
+  } else if (link != null && link.link.path == 'attendance') {
+    return '/attendance/${link.link.queryParameters['id']}';
+  } else {
+    return null;
+  }
+}
+
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
@@ -68,21 +87,9 @@ class _AppState extends State<App> {
       builder: (context, state) => const RegisterDevicePage(),
     ),
     GoRoute(
-        redirect: (context, state) async {
-          var link = await FirebaseDynamicLinks.instance.getInitialLink();
-          if (FirebaseAuth.instance.currentUser == null) {
-            return '/login';
-            // 로그인이 안되어있으면 출결 페이지 안띄움
-          } else if (link != null && link.link.path == 'attendance') {
-            return '/attendance/${link.link.queryParameters['id']}';
-          } else {
-            return null;
-          }
-        },
+        redirect: loginRedirect,
         path: '/',
-        builder: (context, state) => const MainPage(
-              appName: appName,
-            ),
+        builder: (context, state) => const AttendanceHistoryPage(),
         routes: [
           GoRoute(
             path: 'attendance/:id',
@@ -100,10 +107,6 @@ class _AppState extends State<App> {
           GoRoute(
             path: 'settings',
             builder: (context, state) => const SettingsPage(),
-          ),
-          GoRoute(
-            path: 'history',
-            builder: (context, state) => const AttendanceHistoryPage(),
           ),
         ]),
   ]);
