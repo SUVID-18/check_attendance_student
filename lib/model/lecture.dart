@@ -69,7 +69,7 @@ class Lecture {
       name: json['name'],
       department: json['department'],
       major: json['major'],
-      room: json['room'],
+      room: json['room'] ?? '',
       professorId: json['professor_id'],
       dayWeek: json['day_week'],
       startLesson: json['start_at'],
