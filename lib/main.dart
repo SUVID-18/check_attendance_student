@@ -29,21 +29,17 @@ void main() async {
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
 
-  FirebaseMessaging.instance.onTokenRefresh.listen((String newtoken) async {
-    print('new token : $newtoken');
-    // var token = await FirebaseMessaging.instance.getToken();
-    // var currentUid = FirebaseAuth.instance.currentUser?.uid;
-    //
-    // // 쿼리 스냅샷을 받아옴
-    // // final QuerySnapshot querySnapshot = await FirebaseFirestore.instance.collection('student').where{}
-    // if (currentUid!=null){
-    //   var docRef = FirebaseFirestore.instance.collection('student').doc(currentUid).get();
-    //   //
-    //
-    //   FirebaseFirestore.instance.collection('student').doc(currentUid).update({
-    //     "token": token
-    //   });
-    // }
+  // 토큰 변경 감지 시 Firestore의 토큰 필드 업데이트
+  FirebaseMessaging.instance.onTokenRefresh.listen((String newToken) async {
+
+    var currentUid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (currentUid!=null){
+      // var docRef = FirebaseFirestore.instance.collection('student').doc(currentUid).get();
+      FirebaseFirestore.instance.collection('student').doc(currentUid).update({
+        'token': newToken
+      });
+    }
   });
 
   runApp(App());
@@ -120,17 +116,9 @@ class _AppState extends State<App> {
 
     _checkGoogleApiAvailability();
 
+    setupInteractedMessage();
     // 알림을 클릭했을 때
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
-      if (message != null) {
-        if (message.notification != null) {
-          print('여기 작동되긴 함?');
-          print('으갸갹: ${message.notification!.title.toString()}');
-          print('으갸갹: ${message.notification!.body.toString()}');
-          print(message.data["click_action"]);
-        }
-      }
-    });
+
   }
 
   /// 앱의 알림 권한을 승인하기 위한 private 메서드.
@@ -165,6 +153,23 @@ class _AppState extends State<App> {
         throw Exception(e);
       }
     }
+  }
+
+  Future<void> setupInteractedMessage() async {
+    RemoteMessage? initialMessage =
+    await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+      if (message.notification != null){
+         context.go('/');
+      }
   }
 
   @override
