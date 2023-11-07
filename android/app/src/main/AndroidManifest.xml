@@ -1,5 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.suvid.check_attendance_student">
+    <uses-permission android:name="android.permission.ACCESS_NOTIFICATION_POLICY"/>
    <application
            android:label="전출 시스템"
            android:name="${applicationName}"
@@ -52,5 +53,12 @@
         <meta-data
             android:name="flutterEmbedding"
             android:value="2" />
+       <meta-data
+               android:name="firebase_messaging_auto_init_enabled"
+               android:value="false" />
+       <meta-data
+               android:name="firebase_analytics_collection_enabled"
+               android:value="false" />
+
     </application>
 </manifest>

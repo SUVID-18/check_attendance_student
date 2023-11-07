@@ -12,7 +12,7 @@ void main() {
           studentId: '18017xxx',
           department: '컴퓨터학부',
           major: '컴퓨터 SW',
-          name: '수원대');
+          name: '수원대', token: 'anything');
       expect(student.name, '수원대');
     });
     test('학생 객체의 직렬화 테스트', () {
@@ -20,7 +20,7 @@ void main() {
           studentId: '18017xxx',
           department: '컴퓨터학부',
           major: '컴퓨터 SW',
-          name: '수원대');
+          name: '수원대', token: 'anything');
       final jsonData = jsonEncode(student);
       expect(student, Student.fromJson(jsonDecode(jsonData)));
     });

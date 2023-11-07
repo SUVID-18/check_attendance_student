@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 /// 로그인 페이지의 동작을 담당하는 클래스
 class LoginViewModel with WidgetsBindingObserver {
@@ -122,11 +123,14 @@ class LoginViewModel with WidgetsBindingObserver {
         var document = await db.doc(userCredential.user!.uid).get();
         // 사용자의 객체가 서버에 등록이 되어있지 않은 경우 학생 객체 생성 및 전송
         if (!document.exists) {
+          var token = await FirebaseMessaging.instance.getToken();
+
           var student = Student(
               studentId: const Uuid().v4(),
               department: const Uuid().v4(),
               major: const Uuid().v4(),
-              name: const Uuid().v4());
+              name: const Uuid().v4(),
+              token: token!,);
           var preference = await SharedPreferences.getInstance();
           await preference.setString(
               'attendanceStudentId', student.attendanceStudentId);
