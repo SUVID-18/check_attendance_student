@@ -1,6 +1,7 @@
 import 'package:check_attendance_student/model/lecture.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -22,6 +23,26 @@ class AttendanceViewModel {
   ///```
   factory AttendanceViewModel({required String uuid}) =>
       AttendanceViewModel._init(uuid: uuid);
+
+  /// 현재 강의실에서 오늘 진행하는 모든 강의 정보를 반환하는 메서드
+  ///
+  /// 특정 강의실에서 오늘 존재하는 과목을 [List]로 모두 반환하고 존재하지 않을 시 `null`을 반환한다.
+  ///
+  /// ## 같이보기
+  /// * [FutureBuilder]
+  /// * [Lecture]
+  Future<List<Lecture>?> getAllLectures() async {
+    var now = DateTime.now();
+    var subjects = FirebaseFirestore.instance.collection('subjects');
+    var query = await subjects
+        .where('tag_uuid', isEqualTo: uuid)
+        .where('day_week', isEqualTo: now.weekday - 1)
+        .get();
+    if (query.docs.isEmpty) {
+      return null;
+    }
+    return compute(_parseLecture, query.docs);
+  }
 
   /// 출결을 진행하는 버튼
   ///
@@ -86,6 +107,10 @@ class AttendanceViewModel {
       return Lecture.fromJson(data);
     }
   }
+
+  List<Lecture> _parseLecture(
+          List<QueryDocumentSnapshot<Map<String, dynamic>>> result) =>
+      result.map((document) => Lecture.fromJson(document.data())).toList();
 
   AttendanceViewModel._init({required this.uuid});
 }

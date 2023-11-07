@@ -24,10 +24,10 @@ class Lecture {
   /// 강의 진행 요일(0: 월요일, 6: 일요일)
   final int dayWeek;
 
-  /// 시작 교시
+  /// 강의 시작 시간
   final String startLesson;
 
-  /// 종료 교시
+  /// 강의 종료 시간
   final String endLesson;
 
   /// 출석 유효 시간(분단위)
@@ -69,7 +69,7 @@ class Lecture {
       name: json['name'],
       department: json['department'],
       major: json['major'],
-      room: json['room'],
+      room: json['room'] ?? '',
       professorId: json['professor_id'],
       dayWeek: json['day_week'],
       startLesson: json['start_at'],

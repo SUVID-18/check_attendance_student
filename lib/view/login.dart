@@ -39,26 +39,31 @@ class _LoginPageState extends State<LoginPage> {
               children: <Widget>[
                 ///상단 출석체크 위젯
                 ///assets/images/swu_horizontalLogo.png 이미지 추가해놓음
-                SizedBox(height: 80.0),
-                Column(
+          const SizedBox(height: 80.0),
+          Column(
                   children: <Widget>[
                     Image.asset('assets/images/swu_horizontalLogo.png'),
-                    SizedBox(height: 1.0),
-                    Text('수원대 전자출결 앱', style: TextStyle(fontSize: 30),),
-                  ],
+              const SizedBox(height: 1.0),
+              const Text(
+                '수원대 전자출결 앱',
+                style: TextStyle(fontSize: 30),
+              ),
+            ],
                 ),
                 ///이메일 입력란
                 ///usernameController 변수 사용
-                SizedBox(height: 60.0,),
-                TextField(
+          const SizedBox(
+            height: 60.0,
+          ),
+          TextField(
                   controller: viewModel.emailController,
-                  decoration: InputDecoration(
-                      filled: true,
+            decoration: const InputDecoration(filled: true,
                       labelText: 'Email'
                   ),
                 ),
-                SizedBox(height: 12.0),
-                ///이벤트 버튼 구현 위젯
+          const SizedBox(height: 12.0),
+
+          ///이벤트 버튼 구현 위젯
                 ButtonBar(
                   children: <Widget>[
                     ///다음 페이지로 가는 버튼 Next
@@ -80,23 +85,25 @@ class _LoginPageState extends State<LoginPage> {
                       ///viewmodel 반영
                       viewModel.onSubmitPressed(
                           loginBlankDialog: AlertDialog(
-                              title: Text('안내'),
-                              content: Text('ID와 비밀번호를 모두 입력하십시요'),
-                              actions: <Widget>[
+                            title: const Text('안내'),
+                            content: const Text('ID와 비밀번호를 모두 입력하십시요'),
+                            actions: <Widget>[
                                 TextButton(
                                     onPressed: () => Navigator.pop(context),
-                                    child: Text('확인'))
-                              ]));
-                    }
-                        , child: Text('Next'))
-                  ],
+                              child: const Text('확인'))
+                        ]));
+                    },
+                  child: const Text('Next'))
+            ],
                 ),
                 /// 하단 로고
                 /// 이미지 에셋 해놓음
                 Column(
                     children: [
-                      SizedBox(height: 50,),
-                      Image.asset('assets/images/swu_bluelogo.png')
+            const SizedBox(
+              height: 50,
+            ),
+            Image.asset('assets/images/swu_bluelogo.png')
                     ]
                 ),
                 ///기기변경 신청 페이지
@@ -105,8 +112,11 @@ class _LoginPageState extends State<LoginPage> {
                   width: double.infinity,
                   height: 50,
                   child: ElevatedButton(
-                    child: Text('기기변경 신청',style: TextStyle(fontSize: 15),),
-                    onPressed: () => viewModel.onChangePressed(),
+              child: const Text(
+                '기기변경 신청',
+                style: TextStyle(fontSize: 15),
+              ),
+              onPressed: () => viewModel.onChangePressed(),
                   ),
                 )
               ],

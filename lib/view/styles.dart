@@ -1,3 +1,4 @@
+import 'package:check_attendance_student/model/lecture.dart';
 import 'package:flutter/material.dart';
 
 /// 강의실 정보와 출석하기 버튼이 포함된 위젯
@@ -23,11 +24,13 @@ import 'package:flutter/material.dart';
 /// 번 출석 버튼을 누르면 버튼이 비활성화되도록 구현함.
 
 class CheckAttendanceCard extends StatefulWidget {
+  final Future<List<Lecture>?> Function()? getLectureData;
   final String lectureRoomName;
   final String lectureName;
   final void Function()? onAttendance;
 
   const CheckAttendanceCard({
+    this.getLectureData,
     required this.lectureRoomName,
     required this.lectureName,
     this.onAttendance,
@@ -35,7 +38,7 @@ class CheckAttendanceCard extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _CheckAttendanceCardState createState() => _CheckAttendanceCardState();
+  State<CheckAttendanceCard> createState() => _CheckAttendanceCardState();
 }
 
 class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
@@ -99,9 +102,147 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
                 ],
               ),
             ),
+            if (widget.getLectureData != null)
+              SubjectListExpansionTile(
+                  child: FutureBuilder(
+                future: widget.getLectureData!(),
+                builder: (context, snapshot) {
+                  if (snapshot.connectionState == ConnectionState.waiting) {
+                    return const CircularProgressIndicator.adaptive();
+                  } else if (snapshot.data == null) {
+                    return const Text('강의 정보가 없습니다.');
+                  } else {
+                    return SizedBox(
+                      height: 120,
+                      child: ListView.builder(
+                          itemCount: snapshot.data!.length,
+                          itemBuilder: (context, index){
+                            return ListTile(
+                              leading: const Icon(Icons.account_balance),
+                              title: Text('강의명: ' + snapshot.data![index].name,
+                                    style: const TextStyle(
+                                      fontWeight: FontWeight.bold
+                                    ),
+                                ),
+                                subtitle: Text(
+                                '강의 시작 시간: ${snapshot.data![index].startLesson}, '
+                                '강의 종료 시간: ${snapshot.data![index].endLesson}',
+                                overflow: TextOverflow.clip,
+                                ),
+                            );
+                        }
+                      ),
+                    );
+                  }
+                },
+              ))
           ],
         ),
       ),
+    );
+  }
+}
+
+/// 과목의 정보를 출력하는 용도로 만들어진 위젯
+///
+/// 전체 과목의 목록을 출력하는 타일로 화살표가 가운데 있으며, 터치 시 표시할 내용이 나타난다.
+class SubjectListExpansionTile extends StatefulWidget {
+  /// 확장될 때 표시할 [Widget]을 추가하는 곳
+  ///
+  /// 확장 아이콘을 누르면 해당 위젯이 출력됩니다. [null]이 될 수 없습니다.
+  final Widget child;
+
+  /// 확장 아이콘 위에 나타낼 위젯
+  ///
+  /// 어떤 내용을 표시할 지 나타내는 용도로 사용됩니다. 일반적으로 [Text]가 사용됩니다.
+  final Widget? subTitle;
+
+  /// 화살표가 가운데 있는 형태의 ExpansionTile이라 보면 된다. [child]에 버튼을 누른 후 표시할
+  /// 위젯을 삽입하면 된다.
+  const SubjectListExpansionTile(
+      {required this.child, this.subTitle, super.key});
+
+  @override
+  State<SubjectListExpansionTile> createState() =>
+      _SubjectListExpansionTileState();
+}
+
+class _SubjectListExpansionTileState extends State<SubjectListExpansionTile>
+    with TickerProviderStateMixin {
+  late AnimationController _animationController;
+  late Animation<double> _heightFactor;
+  bool _isExpanded = false;
+  static final Animatable<double> _easeInTween =
+      CurveTween(curve: Curves.easeIn);
+  static final Animatable<double> _halfTween =
+      Tween<double>(begin: 0.0, end: 0.5);
+  late Animation<double> _iconTurn;
+
+  @override
+  void initState() {
+    super.initState();
+    _animationController = AnimationController(
+        vsync: this, duration: const Duration(milliseconds: 200));
+    _iconTurn = _animationController.drive(_halfTween.chain(_easeInTween));
+    _heightFactor = _animationController.drive(_easeInTween);
+    _isExpanded =
+        PageStorage.maybeOf(context)?.readState(context) as bool? ?? false;
+    if (_isExpanded) {
+      _animationController.value = 1.0;
+    }
+  }
+
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        InkWell(
+            onTap: () {
+              setState(() {
+                _isExpanded = !_isExpanded;
+                if (_isExpanded) {
+                  _animationController.forward();
+                } else {
+                  _animationController.reverse().then((_) {
+                    setState(() {});
+                  });
+                }
+              });
+              PageStorage.maybeOf(context)?.writeState(context, _isExpanded);
+            },
+            child: SizedBox(
+              width: MediaQuery.of(context).size.width,
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    if (widget.subTitle != null) widget.subTitle!,
+                    RotationTransition(
+                        turns: _iconTurn, child: const Icon(Icons.expand_more)),
+                  ],
+                ),
+              ),
+            )),
+        AnimatedBuilder(
+          animation: _animationController.view,
+          child: widget.child,
+          builder: (context, child) {
+            return ClipRect(
+              child: Align(
+                alignment: Alignment.center,
+                heightFactor: _heightFactor.value,
+                child: child,
+              ),
+            );
+          },
+        )
+      ],
     );
   }
 }
