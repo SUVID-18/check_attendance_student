@@ -116,7 +116,6 @@ class LoginViewModel with WidgetsBindingObserver {
         // 사용자의 객체가 서버에 등록이 되어있지 않은 경우 학생 객체 생성 및 전송
         if (!document.exists) {
           var token = await FirebaseMessaging.instance.getToken();
-          print("토큰 : ${token}");
 
           var student = Student(
               studentId: const Uuid().v4(),

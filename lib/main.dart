@@ -19,7 +19,6 @@ import 'package:google_api_availability/google_api_availability.dart';
 // 백그라운드에서 메세지를 핸들링 하는 프라이빗 메서드
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
-  print('핸들링 메세지 : ${message.messageId}');
 }
 
 //달력 로컬라이징을 위한 async화와 initializeDateFormatting
@@ -144,7 +143,7 @@ class _AppState extends State<App> {
     GooglePlayServicesAvailability checkResult = await GoogleApiAvailability
         .instance
         .checkGooglePlayServicesAvailability();
-    print('구글 서비스 승인 확인 : ${checkResult.value.toInt()}');
+
     if (checkResult.value ==
         GooglePlayServicesAvailability.serviceMissing.value) {
       try {
