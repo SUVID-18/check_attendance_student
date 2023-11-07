@@ -168,9 +168,8 @@ class _AppState extends State<App> {
     FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
       if (message != null) {
         if (message.notification != null) {
-          print('여기 작동되긴 함?');
-          print('으갸갹: ${message.notification!.title.toString()}');
-          print('으갸갹: ${message.notification!.body.toString()}');
+          print('${message.notification!.title.toString()}');
+          print('${message.notification!.body.toString()}');
           print(message.data["click_action"]);
         }
       }
