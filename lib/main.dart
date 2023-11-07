@@ -164,16 +164,6 @@ class _AppState extends State<App> {
     }
 
     FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
-
-    FirebaseMessaging.onMessageOpenedApp.listen((RemoteMessage? message) {
-      if (message != null) {
-        if (message.notification != null) {
-          print('${message.notification!.title.toString()}');
-          print('${message.notification!.body.toString()}');
-          print(message.data["click_action"]);
-        }
-      }
-    });
   }
 
   void _handleMessage(RemoteMessage message) {
