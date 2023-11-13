@@ -1,5 +1,4 @@
 import 'package:check_attendance_student/model/lecture.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -32,16 +31,16 @@ class AttendanceViewModel {
   /// * [FutureBuilder]
   /// * [Lecture]
   Future<List<Lecture>?> getAllLectures() async {
-    var now = DateTime.now();
-    var subjects = FirebaseFirestore.instance.collection('subjects');
-    var query = await subjects
-        .where('tag_uuid', isEqualTo: uuid)
-        .where('day_week', isEqualTo: now.weekday - 1)
-        .get();
-    if (query.docs.isEmpty) {
+    try {
+      var subjects = await FirebaseFunctions.instance
+          .httpsCallable('get_all_subjects')
+          .call({
+        'tag_uuid': uuid,
+      });
+      return compute(_parseLecture, subjects.data as List);
+    } on FirebaseFunctionsException {
       return null;
     }
-    return compute(_parseLecture, query.docs);
   }
 
   /// 출결을 진행하는 버튼
@@ -82,35 +81,23 @@ class AttendanceViewModel {
   /// * [FutureBuilder]
   /// * [Lecture]
   Future<Lecture?> getLecture() async {
-    var now = DateTime.now();
-    var subjects = FirebaseFirestore.instance.collection('subjects');
-    var query = await subjects
-        .where('tag_uuid', isEqualTo: uuid)
-        .where('day_week', isEqualTo: now.weekday - 1)
-        .where('start_at',
-            isGreaterThan:
-                '${now.hour.toString().padLeft(2, '0')}:${now.minute.toString().padLeft(2, '0')}:${now.second.toString().padLeft(2, '0')}.${now.millisecond.toString().padLeft(6, '0')}')
-        .get();
-    if (query.docs.isEmpty) {
+    var preference = await SharedPreferences.getInstance();
+    var deviceToken = preference.getString('attendanceStudentId');
+    try {
+      var subject = await FirebaseFunctions.instance
+          .httpsCallable('check_available_subject')
+          .call({
+        'device_uuid': deviceToken,
+        'tag_uuid': uuid,
+      });
+      return Lecture.fromJson(subject.data);
+    } on FirebaseFunctionsException {
       return null;
-    } else {
-      var data = query.docs.first.data();
-      var roomName = await FirebaseFirestore.instance
-          .collection('classroom')
-          .where('tag_uuid', isEqualTo: uuid)
-          .get();
-      if (roomName.docs.isEmpty) {
-        return null;
-      } else {
-        data.putIfAbsent('room', () => roomName.docs.first.data()['name']);
-      }
-      return Lecture.fromJson(data);
     }
   }
 
-  List<Lecture> _parseLecture(
-          List<QueryDocumentSnapshot<Map<String, dynamic>>> result) =>
-      result.map((document) => Lecture.fromJson(document.data())).toList();
+  List<Lecture> _parseLecture(List result) =>
+      result.map((subject) => Lecture.fromJson(subject)).toList();
 
   AttendanceViewModel._init({required this.uuid});
 }

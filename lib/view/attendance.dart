@@ -43,13 +43,13 @@ class _AttendancePageState extends State<AttendancePage> {
                     } else if (snapshot.data == null) {
                       return CheckAttendanceCard(
                         getLectureData: viewModel.getAllLectures,
-                        lectureRoomName: '현재 강의 정보 없음',
+                        department: '현재 강의 정보 없음',
                         lectureName: '현재 강의 정보 없음',
                       );
                     } else {
                       return CheckAttendanceCard(
                         getLectureData: viewModel.getAllLectures,
-                        lectureRoomName: snapshot.data!.room,
+                        department: snapshot.data!.room,
                         lectureName: snapshot.data!.name,
                         onAttendance: () async {
                           try {
