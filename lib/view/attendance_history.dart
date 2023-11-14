@@ -23,8 +23,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //appBar 부분
-      appBar: AppBar(
-          title: const Text('출결 기록 페이지'), actions: [
+      appBar: AppBar(title: const Text('출결 기록 페이지'), actions: [
         IconButton(
           onPressed: () => context.push('/settings'),
           icon: const Icon(Icons.settings, color: Colors.black),
@@ -133,7 +132,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                               style: const TextStyle(fontSize: 20.0),
                             ),
                             Text(
-                              attendanceHistoryList[index].result.toString(),
+                              '${attendanceHistoryList[index].result.toString()} (${attendanceHistoryList[index].attendanceDate.month}/${attendanceHistoryList[index].attendanceDate.day})',
                               style: const TextStyle(fontSize: 20.0),
                             ),
                           ],
