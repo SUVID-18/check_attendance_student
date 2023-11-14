@@ -13,7 +13,6 @@ import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/date_symbol_data_local.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:flutter/foundation.dart';
 
@@ -119,8 +118,14 @@ class _AppState extends State<App> {
     _checkGoogleApiAvailability();
 
     setupInteractedMessage();
-    // 알림을 클릭했을 때
 
+    // foreground에서 알림을 수신했을 때 변동되었음을 알리는 스낵바가 표시된다.
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+
+      if (message.notification != null) {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('출결 정보가 변경되었습니다.')));
+      }
+    });
   }
 
   /// 앱의 알림 권한을 승인하기 위한 private 메서드.
@@ -173,6 +178,9 @@ class _AppState extends State<App> {
          context.go('/');
       }
   }
+
+
+
 
   @override
   Widget build(BuildContext context) {
