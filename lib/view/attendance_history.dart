@@ -32,8 +32,8 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
       ]),
 
       //ListView를 사용해 리스트를 동적으로 나타내도록 함
-      body: FutureBuilder<List<AttendanceInformation>>(
-          future: viewModel.getAttendanceHistory(),
+      body: StreamBuilder<List<AttendanceInformation>>(
+          stream: viewModel.getAttendanceHistory(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());

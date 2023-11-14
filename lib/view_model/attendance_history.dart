@@ -1,7 +1,6 @@
 import 'package:check_attendance_student/model/attendance_information.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// 출결 기록 페이지의 동작을 담당하는 클래스
@@ -50,23 +49,22 @@ class AttendanceHistoryViewModel {
   /// * [AttendanceInformation]
   /// * [FutureBuilder]
   ///
-  Future<List<AttendanceInformation>> getAttendanceHistory() async {
+  Stream<List<AttendanceInformation>> getAttendanceHistory() {
     var user = FirebaseAuth.instance.currentUser;
     if (user != null) {
-      var data = await FirebaseFirestore.instance
+      var data = FirebaseFirestore.instance
           .collection('attendance_history/student/${user.uid}')
-          .get();
-      return compute(_parseHistory, data.docs);
+          .snapshots();
+      return data.map((event) => _parseHistory(event).toList());
     }
     // 로그인을 안했는데 출력기록 접근 시도 시 오류
     throw Exception('User is not logged in');
   }
 
-  List<AttendanceInformation> _parseHistory(
-          List<QueryDocumentSnapshot<Map<String, dynamic>>> result) =>
-      result
-          .map((document) => AttendanceInformation.fromJson(document.data()))
-          .toList();
+  Iterable<AttendanceInformation> _parseHistory(
+          QuerySnapshot<Map<String, dynamic>> event) =>
+      event.docs.map((e) => AttendanceInformation.fromJson(e.data()));
+
   static final AttendanceHistoryViewModel _instance =
       AttendanceHistoryViewModel._init();
 
