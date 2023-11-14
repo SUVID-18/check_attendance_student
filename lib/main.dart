@@ -117,15 +117,9 @@ class _AppState extends State<App> {
 
     _checkGoogleApiAvailability();
 
-    setupInteractedMessage();
+    _setupInteractedMessage();
 
-    // foreground에서 알림을 수신했을 때 변동되었음을 알리는 스낵바가 표시된다.
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-
-      if (message.notification != null) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('출결 정보가 변경되었습니다.')));
-      }
-    });
+    _foregroundMessagingHandler();
   }
 
   /// 앱의 알림 권한을 승인하기 위한 private 메서드.
@@ -162,7 +156,7 @@ class _AppState extends State<App> {
     }
   }
 
-  Future<void> setupInteractedMessage() async {
+  Future<void> _setupInteractedMessage() async {
     RemoteMessage? initialMessage =
     await FirebaseMessaging.instance.getInitialMessage();
 
@@ -179,8 +173,23 @@ class _AppState extends State<App> {
       }
   }
 
+  _foregroundMessagingHandler() async{
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
 
-
+      if (message.notification != null) {
+        showDialog(context: context, builder: (BuildContext context){
+          return AlertDialog(
+            content: Text('출결 정보가 변동되었습니다.'),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.pop(context);
+              }, child: Text('확인'))
+            ],
+          );
+        });
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
