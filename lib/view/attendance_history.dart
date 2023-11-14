@@ -78,6 +78,11 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                                             style:
                                                 const TextStyle(fontSize: 20.0),
                                           ),
+                                          Text(
+                                            '출결 일자: ${attendanceHistoryList[index].attendanceDate}',
+                                            style:
+                                                const TextStyle(fontSize: 20.0),
+                                          )
                                         ]),
 
                                     ///확인 버튼임

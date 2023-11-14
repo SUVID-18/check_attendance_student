@@ -3,16 +3,7 @@ import 'package:flutter/material.dart';
 
 /// 강의실 정보와 출석하기 버튼이 포함된 위젯
 ///
-/// 강의실 이름과 과목 이름과 출결하기 버튼을 출력하는 카드 형태의 위젯이다.
-/// 강의실 이름에 해당되는 변수
-//lectureRoomName;
-/// 과목 이름에 해당되는 변수
-//lectureName;
-/// 출석하기 버튼을 누를 시 수행되는 동작
-//onAttendance;
-/// 강의실 정보와 출석하기 버튼이 포함된 위젯
-///
-/// 강의실 이름에 대한 정보를 [lectureRoomName]를 통해 전달받으며, 과목 이름에 대한 정보를
+/// 수강 대상 학부에 대한 정보를 [department]를 통해 전달받으며, 과목 이름에 대한 정보를
 /// [lectureName]을 통해 전달받는 카드 형태의 위젯으로 출석하기 버튼이 포함되어있다.
 /// 출석하기 버튼을 누를 시 수행될 동작은 [onAttendance]를 통해 제공하면 된다.
 
@@ -25,13 +16,19 @@ import 'package:flutter/material.dart';
 
 class CheckAttendanceCard extends StatefulWidget {
   final Future<List<Lecture>?> Function()? getLectureData;
-  final String lectureRoomName;
+
+  /// 강의 수강 대상 학부에 해당되는 값
+  final String department;
+
+  /// 과목 이름에 해당되는 값
   final String lectureName;
+
+  /// 출석하기 버튼을 누를 시 수행되는 동작
   final void Function()? onAttendance;
 
   const CheckAttendanceCard({
     this.getLectureData,
-    required this.lectureRoomName,
+    required this.department,
     required this.lectureName,
     this.onAttendance,
     Key? key,
@@ -77,7 +74,7 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
               ),
             ),
             Text(
-              '강의실 이름: ${widget.lectureRoomName}',
+              '대상 학부: ${widget.department}',
               style: Theme.of(context).textTheme.titleLarge,
             ),
             Text(
@@ -119,8 +116,9 @@ class _CheckAttendanceCardState extends State<CheckAttendanceCard> {
                           itemBuilder: (context, index){
                             return ListTile(
                               leading: const Icon(Icons.account_balance),
-                              title: Text('강의명: ' + snapshot.data![index].name,
-                                    style: const TextStyle(
+                              title: Text(
+                                '강의명: ${snapshot.data![index].name}',
+                                style: const TextStyle(
                                       fontWeight: FontWeight.bold
                                     ),
                                 ),
