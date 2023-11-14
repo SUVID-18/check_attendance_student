@@ -59,16 +59,6 @@ void main() async {
     }
   });
 
-  FirebaseMessaging.onMessage.listen((RemoteMessage message) {
-    print('Got a message whilst in the foreground!');
-    print('Message data: ${message.data}');
-
-    if (message.notification != null) {
-
-      print('Message also contained a notification: ${message.notification}');
-    }
-  });
-
   runApp(App());
 }
 
@@ -128,7 +118,8 @@ class _AppState extends State<App> {
     _checkGoogleApiAvailability();
 
     setupInteractedMessage();
-    // 알림을 클릭했을 때
+
+    // foreground에서 알림을 수신했을 때 변동되었음을 알리는 스낵바가 표시된다.
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
 
       if (message.notification != null) {
