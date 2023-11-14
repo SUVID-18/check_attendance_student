@@ -63,23 +63,46 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                                     content: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
+                                          const Text(
+                                            '교수명',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                           Text(
-                                            '교수명: ${attendanceHistoryList[index].professorName}',
+                                            attendanceHistoryList[index]
+                                                .professorName,
                                             style:
                                                 const TextStyle(fontSize: 20.0),
                                           ),
+                                          const Text(
+                                            '과목명',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                           Text(
-                                            '과목명: ${attendanceHistoryList[index].subjectName}',
+                                            attendanceHistoryList[index]
+                                                .subjectName,
                                             style:
                                                 const TextStyle(fontSize: 20.0),
                                           ),
-                                          Text(
-                                            '출결 여부: ${attendanceHistoryList[index].result}',
-                                            style:
-                                                const TextStyle(fontSize: 20.0),
+                                          const Text(
+                                            '출결 여부',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            '출결 일자: ${attendanceHistoryList[index].attendanceDate}',
+                                              attendanceHistoryList[index]
+                                                  .result
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 20.0)),
+                                          Text(
+                                            attendanceHistoryList[index]
+                                                .attendanceDate
+                                                .toString(),
                                             style:
                                                 const TextStyle(fontSize: 20.0),
                                           )
