@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_api_availability/google_api_availability.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 @pragma('vm:entry-point')
 // 백그라운드에서 메세지를 핸들링 하는 프라이빗 메서드
@@ -122,11 +123,10 @@ class _AppState extends State<App> {
     _foregroundMessagingHandler();
   }
 
-  /// 앱의 알림 권한을 승인하기 위한 private 메서드.
   _requestPermission() async {
     FirebaseMessaging messaging = FirebaseMessaging.instance;
     messaging.requestPermission(
-      alert: true,
+      alert: true, criticalAlert: true
     )
         .then((permissionResult) {
       if (permissionResult.authorizationStatus == AuthorizationStatus.denied) {
@@ -140,8 +140,7 @@ class _AppState extends State<App> {
     });
   }
 
-  /// Google Play Service 설치를 확인하는 private 메서드.
-  _checkGoogleApiAvailability() async {
+  Future<void> _checkGoogleApiAvailability() async {
     GooglePlayServicesAvailability checkResult = await GoogleApiAvailability
         .instance
         .checkGooglePlayServicesAvailability();
@@ -173,20 +172,34 @@ class _AppState extends State<App> {
       }
   }
 
-  _foregroundMessagingHandler() async{
-    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+  Future<void> _foregroundMessagingHandler() async{
 
+    var channel = const AndroidNotificationChannel(
+      'Notification', // id
+      '알림', // name
+      description: '출결 정보가 변동되었습니다.', // description
+      importance: Importance.high,
+    );
+
+    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
       if (message.notification != null) {
-        showDialog(context: context, builder: (BuildContext context){
-          return AlertDialog(
-            content: Text('출결 정보가 변동되었습니다.'),
-            actions: [
-              TextButton(onPressed: () {
-                Navigator.pop(context);
-              }, child: Text('확인'))
-            ],
-          );
-        });
+        flutterLocalNotificationsPlugin.show(
+            message.hashCode,
+            message.notification?.title,
+            message.notification?.body,
+            NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  icon: '@mipmap/ic_launcher',
+                ),));
       }
     });
   }
