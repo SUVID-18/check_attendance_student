@@ -123,7 +123,17 @@ class _AppState extends State<App> {
     FirebaseMessaging.onMessage.listen((RemoteMessage message) {
 
       if (message.notification != null) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('출결 정보가 변경되었습니다.')));
+        showDialog(context: context, builder: (BuildContext context){
+          return AlertDialog(
+            content: Text('출결 정보가 변동되었습니다.'),
+            actions: [
+              TextButton(onPressed: () {
+                Navigator.pop(context);
+              }, child: Text('확인'))
+            ],
+          );
+        });
+        //ScaffoldMessenger.of(context).showSnackBar(const SnackBar(content: Text('출결 정보가 변경되었습니다.')));
       }
     });
   }
@@ -178,9 +188,6 @@ class _AppState extends State<App> {
          context.go('/');
       }
   }
-
-
-
 
   @override
   Widget build(BuildContext context) {
