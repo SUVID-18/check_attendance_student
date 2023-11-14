@@ -53,14 +53,28 @@ class _AttendancePageState extends State<AttendancePage> {
                         lectureName: snapshot.data!.name,
                         onAttendance: () async {
                           try {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => const AlertDialog(
+                                title: Row(
+                                  children: [
+                                    CircularProgressIndicator.adaptive(),
+                                    Text('  출결 진행 중...')
+                                  ],
+                                ),
+                              ),
+                            );
                             await viewModel.onSubmit();
-                            if (mounted) {
+                            if (context.mounted) {
+                              Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                   const SnackBar(
                                       content: Text('출결이 완료되었습니다.')));
                             }
                           } on FirebaseFunctionsException catch (error) {
                             if (context.mounted) {
+                              Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                       content: Text(
