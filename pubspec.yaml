@@ -49,6 +49,8 @@ dependencies:
   cloud_functions: ^4.2.0
   firebase_messaging: ^14.7.1
   google_api_availability: ^5.0.0
+  notification_channel_manager: ^0.1.1+1
+  flutter_local_notifications: ^16.1.0
 
 dev_dependencies:
   flutter_test:
