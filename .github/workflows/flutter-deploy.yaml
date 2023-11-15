@@ -31,7 +31,6 @@ jobs:
 
   BuildAPK:
     name: Build Android package
-    if: github.ref_name == 'main'
     runs-on: ubuntu-latest
     needs: [ Test ]
 
