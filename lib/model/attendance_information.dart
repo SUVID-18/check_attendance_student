@@ -74,7 +74,7 @@ class AttendanceInformation {
           subjectName: json['subject_name'],
           professorName: json['professor_name'],
           attendanceDate: DateTime.fromMillisecondsSinceEpoch(
-              (json['timestamp'] * 1000).toInt()),
+              (json['timestamp'] * Duration.millisecondsPerSecond).toInt()),
           result: AttendanceResult.values.byName(json['result']));
 
   /// 객체를 `JSON`으로 직렬화 하는 메서드

@@ -11,11 +11,11 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:go_router/go_router.dart';
 import 'package:google_api_availability/google_api_availability.dart';
-import 'package:flutter/foundation.dart';
-import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 
 @pragma('vm:entry-point')
 // 백그라운드에서 메세지를 핸들링 하는 프라이빗 메서드
@@ -60,14 +60,14 @@ void main() async {
     }
   });
 
-  runApp(App());
+  runApp(const App());
 }
 
 /// 앱 이름에 해당되는 상수
 const String appName = '전출 시스템';
 
 class App extends StatefulWidget {
-  App({Key? key}) : super(key: key);
+  const App({Key? key}) : super(key: key);
 
   @override
   State<App> createState() => _AppState();
@@ -132,10 +132,9 @@ class _AppState extends State<App> {
       if (permissionResult.authorizationStatus == AuthorizationStatus.denied) {
         showDialog(
             context: context,
-            builder: (BuildContext context) => AlertDialog(
-                title: const Text('경고'),
-                content:
-                    const Text('알림 기능을 허용하지 않으면 출결 변동 알림을 받지 못할 수도 있습니다.')));
+            builder: (BuildContext context) => const AlertDialog(
+                title: Text('경고'),
+                content: Text('알림 기능을 허용하지 않으면 출결 변동 알림을 받지 못할 수도 있습니다.')));
       }
     });
   }
