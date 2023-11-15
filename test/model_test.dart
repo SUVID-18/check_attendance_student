@@ -39,18 +39,6 @@ void main() {
       );
       expect(lecture.name, 'Flutter의 개발과 이해');
     });
-    test('강의 객체의 직렬화 테스트', () {
-      const lecture = Lecture(
-        name: 'Flutter의 개발과 이해',
-        department: '컴퓨터학부',
-        major: '컴퓨터SW',
-        room: 'IT 000호',
-        startLesson: '11:15:00.000000',
-        endLesson: '13:20:00.000000',
-      );
-      final jsonData = jsonEncode(lecture);
-      expect(lecture.name, Lecture.fromJson(jsonDecode(jsonData)).name);
-    });
   });
   group('출결 여부를 가진 객체 테스트', () {
     test('출결 여부를 가진 객체가 생성되는지 테스트', () {

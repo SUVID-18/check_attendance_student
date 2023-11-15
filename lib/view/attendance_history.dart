@@ -15,7 +15,6 @@ class AttendanceHistoryPage extends StatefulWidget {
   State<AttendanceHistoryPage> createState() => _AttendanceHistoryPageState();
 }
 
-///viewmodel
 var viewModel = AttendanceHistoryViewModel();
 
 class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
@@ -30,7 +29,6 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
         )
       ]),
 
-      //ListView를 사용해 리스트를 동적으로 나타내도록 함
       body: StreamBuilder<List<AttendanceInformation>>(
           stream: viewModel.getAttendanceHistory(),
           builder: (context, snapshot) {

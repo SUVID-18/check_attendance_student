@@ -49,10 +49,6 @@ class _SettingsPageState extends State<SettingsPage> {
               ///여백용 SizedBox
               const SizedBox(height: 10),
 
-              ///계정정보란
-              /// viewModel 반영
-              //터치시 AlertDialog 이용하여 계정정보를 보여줌
-              //그냥 쓰니 text overflow가 나서 sizedbox로 감싸고 shrinkwarp사용
               GestureDetector(
                   onTap: () {
                     showDialog(
