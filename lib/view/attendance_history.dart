@@ -23,8 +23,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       //appBar 부분
-      appBar: AppBar(
-          title: const Text('출결 기록 페이지'), actions: [
+      appBar: AppBar(title: const Text('출결 기록 페이지'), actions: [
         IconButton(
           onPressed: () => context.push('/settings'),
           icon: const Icon(Icons.settings, color: Colors.black),
@@ -32,8 +31,8 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
       ]),
 
       //ListView를 사용해 리스트를 동적으로 나타내도록 함
-      body: FutureBuilder<List<AttendanceInformation>>(
-          future: viewModel.getAttendanceHistory(),
+      body: StreamBuilder<List<AttendanceInformation>>(
+          stream: viewModel.getAttendanceHistory(),
           builder: (context, snapshot) {
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
@@ -63,23 +62,46 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                                     content: Column(
                                         mainAxisSize: MainAxisSize.min,
                                         children: [
+                                          const Text(
+                                            '교수명',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                           Text(
-                                            '교수명: ${attendanceHistoryList[index].professorName}',
+                                            attendanceHistoryList[index]
+                                                .professorName,
                                             style:
                                                 const TextStyle(fontSize: 20.0),
                                           ),
+                                          const Text(
+                                            '과목명',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
+                                          ),
                                           Text(
-                                            '과목명: ${attendanceHistoryList[index].subjectName}',
+                                            attendanceHistoryList[index]
+                                                .subjectName,
                                             style:
                                                 const TextStyle(fontSize: 20.0),
                                           ),
-                                          Text(
-                                            '출결 여부: ${attendanceHistoryList[index].result}',
-                                            style:
-                                                const TextStyle(fontSize: 20.0),
+                                          const Text(
+                                            '출결 여부',
+                                            style: TextStyle(
+                                                fontSize: 20.0,
+                                                fontWeight: FontWeight.bold),
                                           ),
                                           Text(
-                                            '출결 일자: ${attendanceHistoryList[index].attendanceDate}',
+                                              attendanceHistoryList[index]
+                                                  .result
+                                                  .toString(),
+                                              style: const TextStyle(
+                                                  fontSize: 20.0)),
+                                          Text(
+                                            attendanceHistoryList[index]
+                                                .attendanceDate
+                                                .toString(),
                                             style:
                                                 const TextStyle(fontSize: 20.0),
                                           )
@@ -110,7 +132,7 @@ class _AttendanceHistoryPageState extends State<AttendanceHistoryPage> {
                               style: const TextStyle(fontSize: 20.0),
                             ),
                             Text(
-                              attendanceHistoryList[index].result.toString(),
+                              '${attendanceHistoryList[index].result.toString()} (${attendanceHistoryList[index].attendanceDate.month}/${attendanceHistoryList[index].attendanceDate.day})',
                               style: const TextStyle(fontSize: 20.0),
                             ),
                           ],
