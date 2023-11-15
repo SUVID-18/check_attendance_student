@@ -4,16 +4,24 @@ import 'package:check_attendance_student/firebase_options.dart';
 import 'package:check_attendance_student/view/attendance.dart';
 import 'package:check_attendance_student/view/attendance_history.dart';
 import 'package:check_attendance_student/view/login.dart';
-import 'package:check_attendance_student/view/main_page.dart';
 import 'package:check_attendance_student/view/register_device.dart';
 import 'package:check_attendance_student/view/settings_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_dynamic_links/firebase_dynamic_links.dart';
-import 'package:flutter/foundation.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-import 'package:intl/date_symbol_data_local.dart';
+import 'package:google_api_availability/google_api_availability.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+
+@pragma('vm:entry-point')
+// 백그라운드에서 메세지를 핸들링 하는 프라이빗 메서드
+Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
+  await Firebase.initializeApp();
+}
 
 /// 릴리즈 모드 여부에 따라 리다이렉트 여부를 지정하는 함수
 ///
@@ -34,20 +42,38 @@ FutureOr<String?> loginRedirect(context, state) async {
   }
 }
 
-//달력 로컬라이징을 위한 async화와 initializeDateFormatting
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await initializeDateFormatting();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+  // 토큰 변경 감지 시 Firestore의 토큰 필드 업데이트
+  FirebaseMessaging.instance.onTokenRefresh.listen((String newToken) async {
+
+    var currentUid = FirebaseAuth.instance.currentUser?.uid;
+
+    if (currentUid!=null){
+      // var docRef = FirebaseFirestore.instance.collection('student').doc(currentUid).get();
+      FirebaseFirestore.instance.collection('student').doc(currentUid).update({
+        'token': newToken
+      });
+    }
+  });
+
   runApp(App());
 }
 
 /// 앱 이름에 해당되는 상수
 const String appName = '전출 시스템';
 
-class App extends StatelessWidget {
+class App extends StatefulWidget {
   App({Key? key}) : super(key: key);
 
+  @override
+  State<App> createState() => _AppState();
+}
+
+class _AppState extends State<App> {
   final GoRouter _routes = GoRouter(routes: [
     // 앱 실행 시 가장 먼저 출력되는 로그인 페이지
     GoRoute(
@@ -60,12 +86,9 @@ class App extends StatelessWidget {
       builder: (context, state) => const RegisterDevicePage(),
     ),
     GoRoute(
-        ///차단방지
         redirect: loginRedirect,
         path: '/',
-        builder: (context, state) => const MainPage(
-              appName: appName,
-            ),
+        builder: (context, state) => const AttendanceHistoryPage(),
         routes: [
           GoRoute(
             path: 'attendance/:id',
@@ -84,12 +107,102 @@ class App extends StatelessWidget {
             path: 'settings',
             builder: (context, state) => const SettingsPage(),
           ),
-          GoRoute(
-            path: 'history',
-            builder: (context, state) => const AttendanceHistoryPage(),
-          ),
         ]),
   ]);
+
+  @override
+  void initState() {
+    super.initState();
+
+    _requestPermission();
+
+    _checkGoogleApiAvailability();
+
+    _setupInteractedMessage();
+
+    _foregroundMessagingHandler();
+  }
+
+  _requestPermission() async {
+    FirebaseMessaging messaging = FirebaseMessaging.instance;
+    messaging.requestPermission(
+      alert: true, criticalAlert: true
+    )
+        .then((permissionResult) {
+      if (permissionResult.authorizationStatus == AuthorizationStatus.denied) {
+        showDialog(
+            context: context,
+            builder: (BuildContext context) => AlertDialog(
+                title: const Text('경고'),
+                content:
+                    const Text('알림 기능을 허용하지 않으면 출결 변동 알림을 받지 못할 수도 있습니다.')));
+      }
+    });
+  }
+
+  Future<void> _checkGoogleApiAvailability() async {
+    GooglePlayServicesAvailability checkResult = await GoogleApiAvailability
+        .instance
+        .checkGooglePlayServicesAvailability();
+
+    if (checkResult.value ==
+        GooglePlayServicesAvailability.serviceMissing.value) {
+      try {
+        await GoogleApiAvailability.instance.makeGooglePlayServicesAvailable();
+      } catch (e) {
+        throw Exception(e);
+      }
+    }
+  }
+
+  Future<void> _setupInteractedMessage() async {
+    RemoteMessage? initialMessage =
+    await FirebaseMessaging.instance.getInitialMessage();
+
+    if (initialMessage != null) {
+      _handleMessage(initialMessage);
+    }
+
+    FirebaseMessaging.onMessageOpenedApp.listen(_handleMessage);
+  }
+
+  void _handleMessage(RemoteMessage message) {
+      if (message.notification != null){
+         context.go('/');
+      }
+  }
+
+  Future<void> _foregroundMessagingHandler() async{
+
+    var channel = const AndroidNotificationChannel(
+      'Notification', // id
+      '알림', // name
+      description: '출결 정보가 변동되었습니다.', // description
+      importance: Importance.high,
+    );
+
+    var flutterLocalNotificationsPlugin = FlutterLocalNotificationsPlugin();
+
+    await flutterLocalNotificationsPlugin
+        .resolvePlatformSpecificImplementation<AndroidFlutterLocalNotificationsPlugin>()
+        ?.createNotificationChannel(channel);
+
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      if (message.notification != null) {
+        flutterLocalNotificationsPlugin.show(
+            message.hashCode,
+            message.notification?.title,
+            message.notification?.body,
+            NotificationDetails(
+                android: AndroidNotificationDetails(
+                  channel.id,
+                  channel.name,
+                  channelDescription: channel.description,
+                  icon: '@mipmap/ic_launcher',
+                ),));
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {

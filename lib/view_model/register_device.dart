@@ -8,14 +8,14 @@ class RegisterDeviceViewModel {
   /// 이름에 해당되는 컨트롤러
   final nameController = TextEditingController();
 
-  /// 전화번호에 해당되는 컨트롤러
-  final phoneNumberController = TextEditingController();
+  /// 학부 해당되는 컨트롤러
+  final departmentController = TextEditingController();
 
   /// 학번에 해당되는 컨트롤러
   final studentIDController = TextEditingController();
 
-  /// 이메일에 해당되는 컨트롤러
-  final emailIDController = TextEditingController();
+  /// 전공에 해당되는 컨트롤러
+  final majorController = TextEditingController();
 
   /// 특정 메서드에서 위젯을 띄우기 위한 [BuildContext]
   final BuildContext context;
@@ -58,7 +58,7 @@ class RegisterDeviceViewModel {
   ///```
   void onSubmitPressed({required AlertDialog blankDialog}) {
     if (nameController.text.isEmpty ||
-        phoneNumberController.text.isEmpty ||
+        departmentController.text.isEmpty ||
         studentIDController.text.isEmpty) {
       showDialog(
         context: context,
@@ -75,8 +75,13 @@ class RegisterDeviceViewModel {
           // 설정 저장소에 저장된 값 읽기(로그인 과정에서 저장되기에 없으면 오류)
           var attendanceStudentId = pref.getString('attendanceStudentId');
           if (attendanceStudentId != null) {
-            batch
-                .update(document, {'attendanceStudentId': attendanceStudentId});
+            batch.update(document, {
+              'student_id': attendanceStudentId,
+              'department': departmentController.text,
+              'name': nameController.text,
+              'major': majorController.text,
+              'is_first': false
+            });
           } else {
             showDialog(
               context: context,

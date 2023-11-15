@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:uuid/uuid.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 /// 로그인 페이지의 동작을 담당하는 클래스
 class LoginViewModel with WidgetsBindingObserver {
@@ -20,6 +21,9 @@ class LoginViewModel with WidgetsBindingObserver {
 
   /// 사용자 이메일 계정 확인
   String get userEmail => _userEmail;
+
+  /// 이메일 링크로 로그인 시 사용되는 이벤트 데이터
+  PendingDynamicLinkData? _loginEvent;
 
   @Deprecated('해당 컨트롤러는 더 이상 사용되지 않습니다. 다음 버전에서는 제거될 코드입니다.')
 
@@ -71,6 +75,9 @@ class LoginViewModel with WidgetsBindingObserver {
 
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
+    FirebaseDynamicLinks.instance.onLink.listen((event) {
+      _loginEvent = event;
+    });
     if ((state != AppLifecycleState.resumed) &&
         _emailController.text.isNotEmpty) {
       SharedPreferences.getInstance().then((pref) async {
@@ -78,9 +85,9 @@ class LoginViewModel with WidgetsBindingObserver {
       });
     } else if (state == AppLifecycleState.resumed) {
       try {
-        FirebaseDynamicLinks.instance.onLink.listen((event) {
-          _passwordlessLogin(event);
-        });
+        if (_loginEvent != null) {
+          _passwordlessLogin(_loginEvent!);
+        }
       } catch (_) {
         throw Exception('Dynamic Link 관련 처리작업 실패');
       }
@@ -90,21 +97,23 @@ class LoginViewModel with WidgetsBindingObserver {
   void _passwordlessLogin(PendingDynamicLinkData event) async {
     if (_emailController.text.isNotEmpty &&
         FirebaseAuth.instance.isSignInWithEmailLink(event.link.toString())) {
-      showDialog(
-        barrierDismissible: false,
-        context: context,
-        builder: (context) => const Dialog(
-          child: Padding(
-            padding: EdgeInsets.all(8.0),
-            child: Row(
-              children: [
-                CircularProgressIndicator.adaptive(),
-                Text('  로그인 중...')
-              ],
+      if (context.mounted) {
+        showDialog(
+          barrierDismissible: false,
+          context: context,
+          builder: (context) => const Dialog(
+            child: Padding(
+              padding: EdgeInsets.all(8.0),
+              child: Row(
+                children: [
+                  CircularProgressIndicator.adaptive(),
+                  Text('  로그인 중...')
+                ],
+              ),
             ),
           ),
-        ),
-      );
+        );
+      }
       try {
         UserCredential userCredential = await FirebaseAuth.instance
             .signInWithEmailLink(
@@ -114,11 +123,14 @@ class LoginViewModel with WidgetsBindingObserver {
         var document = await db.doc(userCredential.user!.uid).get();
         // 사용자의 객체가 서버에 등록이 되어있지 않은 경우 학생 객체 생성 및 전송
         if (!document.exists) {
+          var token = await FirebaseMessaging.instance.getToken();
+
           var student = Student(
               studentId: const Uuid().v4(),
               department: const Uuid().v4(),
               major: const Uuid().v4(),
-              name: const Uuid().v4());
+              name: const Uuid().v4(),
+              token: token!,);
           var preference = await SharedPreferences.getInstance();
           await preference.setString(
               'attendanceStudentId', student.attendanceStudentId);
@@ -136,8 +148,8 @@ class LoginViewModel with WidgetsBindingObserver {
           context.go('/');
         }
       } catch (err) {
-        Navigator.pop(context);
         if (context.mounted) {
+          Navigator.pop(context);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
               content: Text('로그인에 실패하였습니다.: ${err.toString()}'),
               duration: const Duration(seconds: 1),
@@ -198,8 +210,8 @@ class LoginViewModel with WidgetsBindingObserver {
           androidInstallApp: true);
       FirebaseAuth.instance
           .sendSignInLinkToEmail(
-          email: emailController.text,
-          actionCodeSettings: actionCodeSettings)
+              email: emailController.text,
+              actionCodeSettings: actionCodeSettings)
           .catchError((error) {
         Navigator.pop(context);
         showDialog(

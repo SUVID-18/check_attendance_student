@@ -42,23 +42,44 @@ class _AttendancePageState extends State<AttendancePage> {
                       return Text(snapshot.error.toString());
                     } else if (snapshot.data == null) {
                       return CheckAttendanceCard(
-                        lectureRoomName: '정보 없음',
-                        lectureName: '정보 없음',
+                        getLectureData: viewModel.getAllLectures,
+                        department: '현재 강의 정보 없음',
+                        lectureName: '현재 강의 정보 없음',
                       );
                     } else {
                       return CheckAttendanceCard(
-                        lectureRoomName: snapshot.data!.room,
+                        getLectureData: viewModel.getAllLectures,
+                        department: snapshot.data!.department,
                         lectureName: snapshot.data!.name,
                         onAttendance: () async {
                           try {
+                            showDialog(
+                              barrierDismissible: false,
+                              context: context,
+                              builder: (context) => const AlertDialog(
+                                title: Row(
+                                  children: [
+                                    CircularProgressIndicator.adaptive(),
+                                    Text('  출결 진행 중...')
+                                  ],
+                                ),
+                              ),
+                            );
                             await viewModel.onSubmit();
-                            if (mounted) {
+                            if (context.mounted) {
+                              Navigator.pop(context);
                               ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(content: Text('출결이 완료되었습니다.')));
+                                  const SnackBar(
+                                      content: Text('출결이 완료되었습니다.')));
                             }
                           } on FirebaseFunctionsException catch (error) {
-                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-                                content: Text(error.message ?? '오류가 발생했습니다.')));
+                            if (context.mounted) {
+                              Navigator.pop(context);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                      content: Text(
+                                          error.message ?? '오류가 발생했습니다.')));
+                            }
                           }
                         },
                       );

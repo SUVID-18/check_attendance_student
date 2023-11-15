@@ -23,7 +23,7 @@ class _SettingsPageState extends State<SettingsPage> {
         appBar: AppBar(
             title: const Text('Settings', style: TextStyle(fontSize: 22)),
             leading: IconButton(
-              onPressed: () => Navigator.pop(context, "/"),
+              onPressed: () => Navigator.pop(context, '/'),
               icon: const Icon(Icons.arrow_back, color: Colors.black),
             )),
         body: SafeArea(
@@ -33,14 +33,14 @@ class _SettingsPageState extends State<SettingsPage> {
               const SizedBox(height: 20),
 
               ///상단 부제목 부분
-              Row(
-                children: const [
+              const Row(
+                children: [
                   Icon(
                     Icons.person,
                     color: Colors.blue,
                   ),
                   SizedBox(width: 10),
-                  Text("Account",
+                  Text('Account',
                       style:
                           TextStyle(fontSize: 22, fontWeight: FontWeight.bold))
                 ],
@@ -49,16 +49,12 @@ class _SettingsPageState extends State<SettingsPage> {
               ///여백용 SizedBox
               const SizedBox(height: 10),
 
-              ///계정정보란
-              /// viewModel 반영
-              //터치시 AlertDialog 이용하여 계정정보를 보여줌
-              //그냥 쓰니 text overflow가 나서 sizedbox로 감싸고 shrinkwarp사용
               GestureDetector(
                   onTap: () {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                            title: const Text("계정정보"),
+                                title: const Text('계정정보'),
 
                                 ///정보 받아오기 용 futureBuilder 생성
                                 content: FutureBuilder<Student?>(
@@ -67,7 +63,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         AsyncSnapshot<Student?> snapshot) {
                                       //해당 부분은 data를 아직 받아 오지 못했을 때 실행되는 부분
                                       if (snapshot.hasData == false) {
-                                        return CircularProgressIndicator(); // CircularProgressIndicator : 로딩 에니메이션
+                                        return const CircularProgressIndicator(); // CircularProgressIndicator : 로딩 에니메이션
                                       }
                                       //error가 발생하게 될 경우 반환하게 되는 부분
                                       else if (snapshot.hasError) {
@@ -76,7 +72,8 @@ class _SettingsPageState extends State<SettingsPage> {
                                           child: Text(
                                             'Error: ${snapshot.error}',
                                             // 에러명을 텍스트에 뿌려줌
-                                            style: TextStyle(fontSize: 15),
+                                            style:
+                                                const TextStyle(fontSize: 15),
                                           ),
                                         );
                                       }
@@ -84,30 +81,36 @@ class _SettingsPageState extends State<SettingsPage> {
                                       else {
                                         return Padding(
                                             padding: const EdgeInsets.all(8.0),
-                                            child: Column(children: [
-                                              Text(
+                                            child: Column(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Text(
                                                 snapshot.data?.name ??
                                                     '이름 알 수 없음',
                                                 // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
-                                                style: TextStyle(fontSize: 15),
+                                                style: const TextStyle(
+                                                    fontSize: 15),
                                               ),
                                               Text(
                                                 snapshot.data?.studentId ??
                                                     '학번 알 수 없음',
                                                 // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
-                                                style: TextStyle(fontSize: 15),
+                                                style: const TextStyle(
+                                                    fontSize: 15),
                                               ),
                                               Text(
                                                 snapshot.data?.department ??
                                                     '학부 알 수 없음',
                                                 // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
-                                                style: TextStyle(fontSize: 15),
+                                                style: const TextStyle(
+                                                    fontSize: 15),
                                               ),
                                               Text(
                                                 snapshot.data?.major ??
                                                     '학과 알 수 없음',
                                                 // 비동기 처리를 통해 받은 데이터를 텍스트에 뿌려줌
-                                                style: TextStyle(fontSize: 15),
+                                                style: const TextStyle(
+                                                    fontSize: 15),
                                               ),
                                             ]));
                                       }
@@ -115,7 +118,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 actions: <Widget>[
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: const Text("확인"))
+                                      child: const Text('확인'))
                                 ]));
                   },
 
@@ -127,7 +130,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         //여백을 주기위한 spaceBetween
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("계정 정보 확인",
+                          Text('계정 정보 확인',
                               style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500,
@@ -147,17 +150,17 @@ class _SettingsPageState extends State<SettingsPage> {
                     showDialog(
                         context: context,
                         builder: (BuildContext context) => AlertDialog(
-                                title: const Text("로그아웃"),
-                                content: const Text("로그아웃 하시겠습니까?"),
+                                title: const Text('로그아웃'),
+                                content: const Text('로그아웃 하시겠습니까?'),
                                 actions: <Widget>[
                                   TextButton(
                                       onPressed: () => Navigator.pop(context),
-                                      child: const Text("취소")),
+                                      child: const Text('취소')),
                                   ElevatedButton(
                                       onPressed: () {
                                         viewModel.logout();
                                       },
-                                      child: const Text("확인"))
+                                      child: const Text('확인'))
                                 ]));
                   },
                   child: Padding(
@@ -166,7 +169,7 @@ class _SettingsPageState extends State<SettingsPage> {
                         //여백을 주기 위한 spaceBetween
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Text("로그아웃",
+                          Text('로그아웃',
                               style: TextStyle(
                                   fontSize: 17,
                                   fontWeight: FontWeight.w500,
